@@ -5,6 +5,7 @@ const summary = require('./processing');
 const Slide = require('./slide').Slide;
 const Text = require('./slide').Text;
 const Bullet = require('./slide').Bullet;
+const Title = require('./slide').Title;
 
 let txt = '';
 
@@ -35,8 +36,14 @@ setInterval(() => {
 
     const slide = new Slide();
 
-    const b = new Bullet(newKeywords);
 
+
+    const first = newKeywords.pop();
+
+    const t = new Title(first);
+    slide.addObj(t);
+
+    const b = new Bullet(newKeywords);
     slide.addObj(b);
 
     slides.push(slide);

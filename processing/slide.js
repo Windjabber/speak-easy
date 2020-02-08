@@ -24,7 +24,7 @@ class Text {
   }
 
   toMdx() {
-    return this.txt;
+    return this.txt + '\n';
   }
 }
 
@@ -37,11 +37,21 @@ class Bullet {
     let str = '';
 
     for (let point of this.points) {
-      str += ' - ' + point + '\n';
+      str += ' - ' + point.toUpperCase() + '\n';
     }
 
     return str;
   }
 }
 
-module.exports = { Slide, Text, Bullet };
+class Title {
+  constructor(txt) {
+    this.txt = txt;
+  }
+
+  toMdx() {
+    return " # " + this.txt.toUpperCase() + '\n';
+  }
+}
+
+module.exports = { Slide, Text, Bullet, Title };
