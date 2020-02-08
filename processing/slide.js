@@ -3,7 +3,7 @@ class Text {
     this.txt = txt
   }
 
-  toMdx() {
+  toMdx(last) {
     return this.txt.trim() + '\n';
   }
 }
@@ -13,7 +13,7 @@ class Bullet {
     this.points = points;
   }
 
-  toMdx() {
+  toMdx(last) {
     let str = '';
 
     for (let point of this.points) {
@@ -29,15 +29,22 @@ class Title {
     this.txt = txt;
   }
 
-  toMdx() {
+  toMdx(last) {
     return "# " + this.txt.trim().toUpperCase() + '\n';
   }
 }
 
 class Next {
-  toMdx() {
+  toMdx(last) {
     return "\n\n---\n\n";
   }
 }
 
-module.exports = { Text, Bullet, Title, Next };
+class SoftNext {
+  toMdx(last) {
+    console.log(last);
+    return last ? '' : '\n\n---\n\n';
+  }
+}
+
+module.exports = { Text, Bullet, Title, Next, SoftNext };
