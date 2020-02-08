@@ -9,9 +9,20 @@ const Bullet = slide.Bullet;
 const Title = slide.Title;
 const Next = slide.Next;
 const SoftNext = slide.SoftNext;
+const UTILS = slide.UTILS;
 
 let text = 'Welcome we are speak easy next slide my name is james moving on now let\'s talk about react welcome';
 
+let header = `---
+title: \"Simpsons\"
+path: /riff
+desc: d.
+location: l.
+---
+
+import { Utils, FullscreenImage } from '../../src/components'
+
+`
 // http.createServer(function (req, res) {
 //   res.writeHead(200, {'Content-Type': 'text/plain'});
 //   console.log("Request received");
@@ -94,7 +105,7 @@ for (var i = 0; i < words.length; i++) {
     let match = true;
 
     for (var j = 0; j < mapping.keywords.length; j++) {
-      if (words[i + j] != mapping.keywords[j]) {
+      if (words[i + j] !== mapping.keywords[j]) {
         match = false;
         break;
       }
@@ -103,7 +114,7 @@ for (var i = 0; i < words.length; i++) {
     if (match) {
       matched = true;
 
-      if (curText != '') {
+      if (curText !== '') {
         objs.push(new Text(curText));
         curText = '';
       }
@@ -122,13 +133,15 @@ for (var i = 0; i < words.length; i++) {
 if (curText != '' ) objs.push(new Text(curText));
 
 const slidesToMdx = (slides) => {
-    let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.\n---\n\nimport { Utils, FullscreenImage } from '../../src/components'\n";
+    let str = header;
 
     for (var i = 0; i < slides.length; i++) {
       const s = slides[i];
       console.log(i, slides.length - 1);
       str += s.toMdx(i == slides.length - 1);
     }
+
+    str += UTILS;
 
     return str;
 };
