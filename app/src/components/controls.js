@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import { navigate } from "gatsby";
 
 export const Controls = () => {
@@ -17,10 +16,6 @@ export const Controls = () => {
   }, []);
 
   return <></>;
-};
-
-Controls.propTypes = {
-  children: PropTypes.node.isRequired
 };
 
 export default Controls;
