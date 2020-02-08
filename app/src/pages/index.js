@@ -10,27 +10,29 @@ import '../styles/start.css';
 class Start extends Component {
 
     state = {
-        transcript: ""
+        finalTranscript: ""
     };
 
     render() {
         let {
-            transcript,
+            finalTranscript,
             browserSupportsSpeechRecognition,
-            startListening
+            startListening,
+            resetTranscript,
         } = this.props;
 
         if (!browserSupportsSpeechRecognition) {
-            return null
+            return <p>Your browser does not support speech recognition ):</p>
         }
-        console.log(transcript);
 
-        console.log(transcript);
+        console.log(finalTranscript);
 
-        if (transcript != '') fetch('http://localhost:8080', {
-          method: 'POST',
-          body: JSON.stringify(transcript)
-        });
+        if (finalTranscript !== '') {
+            fetch('http://localhost:8080', {
+                method: 'POST',
+                body: JSON.stringify(finalTranscript)
+            });
+        }
 
         return (
             <>

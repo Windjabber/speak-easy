@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "gatsby";
 
-const Controls = () => {
+export const Controls = () => {
   useEffect(() => {
     const handleEsc = event => {
       if (event.keyCode === 27) {
