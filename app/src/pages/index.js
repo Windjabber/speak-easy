@@ -7,7 +7,6 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import * as PropTypes from "prop-types";
 
-
 class Start extends Component {
 
   state = {
@@ -25,6 +24,12 @@ class Start extends Component {
       return null
     }
     console.log(transcript);
+
+    if (transcript != '') fetch('http://localhost:8080', {
+      method: 'POST',
+      body: JSON.stringify(transcript)
+    });
+
     return (
       <>
         <Layout>
