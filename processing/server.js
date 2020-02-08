@@ -93,7 +93,7 @@ for (var i = 0; i < words.length; i++) {
     let match = true;
 
     for (var j = 0; j < mapping.keywords.length; j++) {
-      if (words[i + j] != mapping.keywords[j]) {
+      if (words[i + j] !== mapping.keywords[j]) {
         match = false;
         break;
       }
@@ -102,7 +102,7 @@ for (var i = 0; i < words.length; i++) {
     if (match) {
       matched = true;
 
-      if (curText != '') {
+      if (curText !== '') {
         objs.push(new Text(curText));
         curText = '';
       }
