@@ -15,12 +15,11 @@ http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
   console.log("Request received");
 
-  let body = [];
-  req.on('data', (chunk) => {
-    body.push(chunk);
-
-    txt = Buffer.concat(body).toString().toLowerCase();
-  });
+  // Dodgy routing code
+  const url = req.url;
+  if (url === '/start') {
+    startListening()
+  }
 
   res.end();
 }).listen(8080);

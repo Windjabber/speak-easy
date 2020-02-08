@@ -7,43 +7,14 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import '../styles/start.css';
 
+
 class Start extends Component {
 
-    state = {
-        transcript: ""
-    };
-
     render() {
-        let {
-            transcript,
-            browserSupportsSpeechRecognition,
-            startListening,
-            resetTranscript,
-            recognition,
-            listening,
-        } = this.props;
 
-        if (!listening) {
-            console.log("Not listening")
-        }
-
-        recognition.onend = () => {
-            console.log("Service disconnected");
-            startListening();
-        };
-
-        if (!browserSupportsSpeechRecognition) {
-            return <p>Your browser does not support speech recognition ):</p>
-        }
-
-        console.log(transcript);
-
-        if (transcript !== '') {
-            fetch('http://localhost:8080', {
-                method: 'POST',
-                body: JSON.stringify(transcript)
-            });
-        }
+        fetch('http://localhost:8080/start', {
+            method: 'POST',
+        });
 
         return (
             <>
@@ -57,7 +28,6 @@ class Start extends Component {
                             style={{border: 'none', marginLeft: 'auto', marginRight: 'auto', backgroundColor: 'white'}}
                             onClick={() => {
                                 console.log("Starting");
-                                startListening()
                             }}
                         >
                             <FontAwesomeIcon icon={faMicrophone} size={"8x"} color="white" style={{
