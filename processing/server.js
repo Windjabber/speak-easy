@@ -22,7 +22,6 @@ http.createServer(function (req, res) {
     }
 
     text = Buffer.concat(body).toString().toLowerCase();
-  });
 
   res.end();
 }).listen(8080);
