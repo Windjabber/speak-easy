@@ -1,15 +1,31 @@
 class Slide {
   constructor() {
-    this.text = '';
+    this.objs = [];
   }
 
-  setText(text) {
-    this.text = text;
+  addObj(obj) {
+    this.objs.push(obj);
   }
 
   toMdx() {
-    return '\n\n---\n\n' + this.text;
+    let str = '\n\n---\n\n';
+
+    for (let obj of this.objs) {
+      str += obj.toMdx();
+    }
+
+    return str;
   }
 };
 
-module.exports = { Slide };
+class Text {
+  constructor(txt) {
+      this.txt = txt
+  }
+
+  toMdx() {
+    return this.txt;
+  }
+}
+
+module.exports = { Slide, Text };

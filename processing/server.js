@@ -3,8 +3,7 @@ const http = require('http');
 
 const summary = require('./processing');
 const Slide = require('./slide').Slide;
-
-
+const Text = require('./slide').Text;
 
 let txt = '';
 
@@ -35,7 +34,10 @@ setInterval(() => {
 
     for (let k of newKeywords) {
       const slide = new Slide();
-      slide.setText(k);
+
+      const t = new Text(k);
+
+      slide.addObj(t);
 
       slides.push(slide);
     }
@@ -50,9 +52,7 @@ setInterval(() => {
 }, 1000);
 
 const slidesToMdx = (slides) => {
-  let str = "---\ntitle: \"Let's Riff\"\npath: /riff\ndesc: Let's go with the flow and present.\nlocation: Right here. Right now.";
-
-  console.log(slides[0]);
+  let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.";
 
   for (let s of slides) {
     str += s.toMdx();
