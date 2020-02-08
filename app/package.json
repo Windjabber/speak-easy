@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-pineapple",
+  "name": "speak-easy-app",
   "private": true,
-  "description": "A GatsbyJS boilerplate with MDX.",
+  "description": "Speak easy app",
   "version": "0.1.0",
-  "author": "Sam Larsen-Disney <s.larsendisney@gmail.com>",
+  "author": "James Dalboth, Daniel Hails, Will Burr, Joon-Ho Son",
   "devDependencies": {
     "@mdx-js/mdx": "^1.5.1",
     "@mdx-js/react": "^1.5.1",
@@ -59,7 +59,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/slarsendisney/gatsby-watermelon"
+    "url": "https://github.com/windjabber/speak-easy"
   },
   "dependencies": {
     "gatsby-plugin-google-analytics": "^2.1.23",
