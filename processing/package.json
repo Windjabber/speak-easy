@@ -9,8 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/speech": "^3.6.0",
     "http": "0.0.0",
     "keyword-extractor": "0.0.18",
-    "nodejs-text-summarizer": "^2.0.3"
+    "node-record-lpcm16": "^1.0.1",
+    "nodejs-text-summarizer": "^2.0.3",
+    "chalk": "latest"
   }
 }
