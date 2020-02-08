@@ -1,6 +1,6 @@
 const keyword_extractor = require("keyword-extractor");
 
-exports.summary(text) => {
+exports.summary = (text) => {
     return keyword_extractor.extract(text,
       {
         language:"english",
