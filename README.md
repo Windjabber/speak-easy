@@ -1,2 +1,2 @@
-# speak-easy
+# Speak Easy
 Speak-easy
