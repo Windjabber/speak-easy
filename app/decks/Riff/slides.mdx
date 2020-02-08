@@ -4,19 +4,23 @@ path: /riff
 desc: Let's go with the flow and present.
 location: Right here. Right now.
 ---
-
-import { FullscreenImage } from '../../src/components'
+import { Utils, FullscreenImage } from '../../src/components'
 
 # :wave:
+
+<Utils />
 
 ---
 
 ![wizard](/images/wizard.png)
 
+<Utils />
+
 ---
 
-
 <FullscreenImage src="/images/dancing-otter.gif" />
+
+<Utils />
 
 ---
 
@@ -24,4 +28,18 @@ import { FullscreenImage } from '../../src/components'
   src="/images/wizard.png"
 />
 
-# Hello!
+<Utils />
+
+---
+
+import { Split } from 'mdx-deck'
+
+<Split>
+
+![](/images/dancing-otter.gif)
+
+## Meow
+
+</Split>
+
+<Utils />

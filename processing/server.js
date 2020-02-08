@@ -106,8 +106,6 @@ for (var i = 0; i < words.length; i++) {
   }
 }
 
-console.log(objs);
-
 objs.push(new Text(curText));
 
 const slidesToMdx = (slides) => {

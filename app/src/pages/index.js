@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import {graphql} from "gatsby";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMicrophone} from "@fortawesome/free-solid-svg-icons"
-import SpeechRecognition from 'react-speech-recognition'
 import Layout from "../components/layout";
+import SpeechRecognition from 'react-speech-recognition'
 import SEO from "../components/seo";
 import '../styles/start.css';
 
