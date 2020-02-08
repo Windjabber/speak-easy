@@ -5,21 +5,23 @@ desc: Let's go with the flow and present.
 location: Right here. Right now.
 ---
 
+import { FullscreenImage } from '../../src/components'
+
 # :wave:
 
 ---
 
----
-import { Appear } from 'gatsby-theme-mdx-deck'
-
-<Appear>
-  <div>beep</div>
-  <div>boop</div>
-</Appear>
+![wizard](/images/wizard.png)
 
 ---
 
-import { Invert } from 'gatsby-theme-mdx-deck'
-<Invert>
-<h1> New Features</h1>
-</Invert>
+
+<FullscreenImage src="/images/dancing-otter.gif" />
+
+---
+
+<FullscreenImage
+  src="/images/wizard.png"
+/>
+
+# Hello!
