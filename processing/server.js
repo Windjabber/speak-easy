@@ -1,9 +1,10 @@
-const summary = require('./processing');
 const fs = require('fs');
+const http = require('http');
 
-//console.log(summary);
+const summary = require('./processing');
+const Slide = require('./slide').Slide;
 
-var http = require('http');
+
 
 let txt = '';
 
@@ -22,23 +23,40 @@ http.createServer(function (req, res) {
 }).listen(8080);
 
 let oldSize = 0;
+let slides = [];
 
 setInterval(() => {
   const keywords = summary.summary(txt);
 
-  console.log(keywords);
+  console.log("Keywords : " + keywords);
 
   if (oldSize < keywords.length) {
-    appendTxt(keywords.slice(oldSize, keywords.length).toString());
+    const newKeywords = keywords.slice(oldSize, keywords.length);
+
+    for (let k of newKeywords) {
+      const slide = new Slide();
+      slide.setText(k);
+
+      slides.push(slide);
+    }
   }
+
+  fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
+    if (err) throw err;
+    console.log(err);
+  });
 
   oldSize = keywords.length;
 }, 1000);
 
-const appendTxt = (txt) => {
-  console.log("Appending");
-  fs.appendFile('../app/decks/Riff/slides.mdx', '\n---\n' + txt, function (err) {
-    if (err) throw err;
-    console.log(err);
-  });
+const slidesToMdx = (slides) => {
+  let str = "---\ntitle: \"Let's Riff\"\npath: /riff\ndesc: Let's go with the flow and present.\nlocation: Right here. Right now.";
+
+  console.log(slides[0]);
+
+  for (let s of slides) {
+    str += s.toMdx();
+  }
+
+  return str;
 };
