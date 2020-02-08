@@ -24,43 +24,41 @@ let text = 'Welcome we are speak easy next slide my name is james moving on now 
 //   res.end();
 // }).listen(8080);
 
-const nextSlideKeywords = [['next', 'slide'], ['moving' ,'on']];
-
 const keywordMappings = [
   {
     keywords: ['next', 'slide'],
-    skip: 2,
     gen: (objs, words, i) => {
       objs.push(new Next());
+      return 1;
     }
   },
   {
     keywords: ['moving', 'on', 'now'],
-    skip: 2,
     gen: (objs, words, i) => {
       objs.push(new Next());
+      return 2;
     }
   },
   {
     keywords: ['image'],
-    skip: 2,
     gen: (objs, words, i) => {
       objs.push(new Text("Imge: " + words[i + 1]));
+      return 1;
     }
   },
   {
     keywords: ['welcome'],
-    skip: 1,
     gen: (objs, words, i) => {
       objs.push(new Title("Welcome!!!"));
       objs.push(new Next());
+      return 0;
     }
   },
   {
     keywords: ['we', 'are'],
-    skip: 2,
     gen: (objs, words, i) => {
       objs.push(new Title("We are..."));
+      return 1;
     }
   }
 ];
@@ -103,14 +101,13 @@ for (var i = 0; i < words.length; i++) {
 
     if (match) {
       matched = true;
-      i += mapping.skip - 1;
 
       if (curText != '') {
         objs.push(new Text(curText));
         curText = '';
       }
 
-      mapping.gen(objs, words, i);
+      i += mapping.gen(objs, words, i);
 
       break;
     }
@@ -124,7 +121,7 @@ for (var i = 0; i < words.length; i++) {
 objs.push(new Text(curText));
 
 const slidesToMdx = (slides) => {
-    let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.\n---\n\nimport { Utils, FullscreenImage } from '../../src/components'";
+    let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.\n---\n\nimport { Utils, FullscreenImage } from '../../src/components'\n";
 
     for (let s of slides) {
         str += s.toMdx();
