@@ -2,10 +2,12 @@ const fs = require('fs');
 const http = require('http');
 
 const summary = require('./processing');
-const Slide = require('./slide').Slide;
-const Text = require('./slide').Text;
-const Bullet = require('./slide').Bullet;
-const Title = require('./slide').Title;
+const slide = require('./slide');
+
+const Slide = slide.Slide;
+const Text = slide.Text;
+const Bullet = slide.Bullet;
+const Title = slide.Title;
 
 let txt = '';
 
@@ -36,8 +38,6 @@ setInterval(() => {
 
     const slide = new Slide();
 
-
-
     const first = newKeywords.pop();
 
     const t = new Title(first);
@@ -49,13 +49,17 @@ setInterval(() => {
     slides.push(slide);
   }
 
-  fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
-    if (err) throw err;
-    console.log(err);
-  });
+  // Generate mdx file
+  genSlides(slides);
 
   oldSize = keywords.length;
 }, 1000);
+
+const genSlides = (slides) => {
+  fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
+    if (err) throw err;
+  });
+};
 
 const slidesToMdx = (slides) => {
   let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.";
