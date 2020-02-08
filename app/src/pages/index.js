@@ -74,7 +74,7 @@ export const query = graphql`
 `;
 
 const options = {
-  autoStart: false
+  autoStart: true
 };
 
 export default SpeechRecognition(options)(Start);
