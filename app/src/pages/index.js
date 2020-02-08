@@ -33,8 +33,7 @@ const Start = ({ data }) => {
               const { title, path, desc, location } = item.frontmatter;
               return (
                 <div className="col-xs-12 col-md-6 col-lg-4 pad-10-l pad-10-r">
-                  <Link to={`/slides/${path}/slides/0` } className="link-reverse">
-                  {console.log(path)}
+                  <Link to={`/decks/${path}/slides/0` } className="link-reverse">
                     <h1>{title}</h1>
                     <h4>{desc}</h4>
                     <p className="opacity-50">{location}</p>

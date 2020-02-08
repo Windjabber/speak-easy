@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "gatsby";
 
-const Layout = () => {
+const Controls = () => {
   useEffect(() => {
     const handleEsc = event => {
       if (event.keyCode === 27) {
@@ -19,8 +19,8 @@ const Layout = () => {
   return <></>;
 };
 
-Layout.propTypes = {
+Controls.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-export default Layout;
+export default Controls;
