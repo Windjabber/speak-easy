@@ -1,0 +1,13 @@
+.start-button {
+    box-shadow: 0 6px 0 #0aad92;
+}
+
+.start-button:active {
+    box-shadow: none;
+    transform: translateY(5px);
+}
+
+button:focus {
+    border-style: none;
+    outline: 0;
+}
