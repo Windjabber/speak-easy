@@ -12,10 +12,6 @@ class Start extends Component {
 
     render() {
 
-        fetch('http://localhost:8080/start', {
-            method: 'POST',
-        });
-
         return (
             <>
                 <Layout>
@@ -28,6 +24,11 @@ class Start extends Component {
                             style={{border: 'none', marginLeft: 'auto', marginRight: 'auto', backgroundColor: 'white'}}
                             onClick={() => {
                                 console.log("Starting");
+
+                                fetch('http://localhost:8080/start', {
+                                    method: 'POST',
+                                });
+
                             }}
                         >
                             <FontAwesomeIcon icon={faMicrophone} size={"8x"} color="white" style={{

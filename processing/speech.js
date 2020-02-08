@@ -1,3 +1,5 @@
-startListening = () => {
-    console.log("Listen");
+module.exports = {
+    startListening: function() {
+        console.log("Listening")
+    }
 };
