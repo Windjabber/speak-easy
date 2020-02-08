@@ -1,9 +1,13 @@
-const summary = require('./processing');
 const fs = require('fs');
+const http = require('http');
 
-//console.log(summary);
+const summary = require('./processing');
+const slide = require('./slide');
 
-var http = require('http');
+const Slide = slide.Slide;
+const Text = slide.Text;
+const Bullet = slide.Bullet;
+const Title = slide.Title;
 
 let txt = '';
 
@@ -22,23 +26,47 @@ http.createServer(function (req, res) {
 }).listen(8080);
 
 let oldSize = 0;
+let slides = [];
 
 setInterval(() => {
   const keywords = summary.summary(txt);
 
-  console.log(keywords);
+  console.log("Keywords : " + keywords);
 
   if (oldSize < keywords.length) {
-    appendTxt(keywords.slice(oldSize, keywords.length).toString());
+    const newKeywords = keywords.slice(oldSize, keywords.length);
+
+    const slide = new Slide();
+
+    const first = newKeywords.pop();
+
+    const t = new Title(first);
+    slide.addObj(t);
+
+    const b = new Bullet(newKeywords);
+    slide.addObj(b);
+
+    slides.push(slide);
   }
+
+  // Generate mdx file
+  genSlides(slides);
 
   oldSize = keywords.length;
 }, 1000);
 
-const appendTxt = (txt) => {
-  console.log("Appending");
-  fs.appendFile('../app/decks/Riff/slides.mdx', '\n---\n' + txt, function (err) {
+const genSlides = (slides) => {
+  fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
     if (err) throw err;
-    console.log(err);
   });
+};
+
+const slidesToMdx = (slides) => {
+  let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.";
+
+  for (let s of slides) {
+    str += s.toMdx();
+  }
+
+  return str;
 };
