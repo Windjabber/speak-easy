@@ -8,9 +8,20 @@ const Text = slide.Text;
 const Bullet = slide.Bullet;
 const Title = slide.Title;
 const Next = slide.Next;
+const UTILS = slide.UTILS;
 
 let text = 'Welcome we are speak easy next slide my name is james moving on now let\'s talk about react';
 
+let header = `---
+title: \"Simpsons\"
+path: /riff
+desc: d.
+location: l.
+---
+
+import { Utils, FullscreenImage } from '../../src/components'
+
+`
 // http.createServer(function (req, res) {
 //   res.writeHead(200, {'Content-Type': 'text/plain'});
 //   console.log("Request received");
@@ -121,17 +132,19 @@ for (var i = 0; i < words.length; i++) {
 objs.push(new Text(curText));
 
 const slidesToMdx = (slides) => {
-    let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.\n---\n\nimport { Utils, FullscreenImage } from '../../src/components'\n";
+    let str = header;
 
     for (let s of slides) {
         str += s.toMdx();
     }
 
+    str += UTILS;
+
     return str;
 };
 
 const genSlides = (slides) => {
-    fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
+    fs.writeFile('../app/decks/riff/slides.mdx', slidesToMdx(slides), function (err) {
         if (err) throw err;
     });
 };

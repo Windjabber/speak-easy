@@ -1,3 +1,13 @@
+const UTILS = `<Utils />`
+
+const SLIDE_END = `
+
+${UTILS}
+
+---
+
+`
+
 class Text {
   constructor(txt) {
     this.txt = txt
@@ -36,8 +46,8 @@ class Title {
 
 class Next {
   toMdx() {
-    return "\n\n---\n\n";
+    return SLIDE_END;
   }
 }
 
-module.exports = { Text, Bullet, Title, Next };
+module.exports = { Text, Bullet, Title, Next, UTILS, SLIDE_END };
