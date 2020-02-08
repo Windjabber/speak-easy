@@ -1,7 +1,6 @@
 const fs = require('fs');
 const http = require('http');
 
-const summary = require('./processing');
 const slide = require('./slide');
 
 const Slide = slide.Slide;
@@ -9,7 +8,7 @@ const Text = slide.Text;
 const Bullet = slide.Bullet;
 const Title = slide.Title;
 
-let txt = '';
+let text = '';
 
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -19,40 +18,36 @@ http.createServer(function (req, res) {
   req.on('data', (chunk) => {
     body.push(chunk);
 
-    txt = Buffer.concat(body).toString().toLowerCase();
+    text = Buffer.concat(body).toString().toLowerCase();
   });
 
   res.end();
 }).listen(8080);
 
-let oldSize = 0;
-let slides = [];
+const nextSlideKeywords = [['next slide'], ['moving on']];
 
 setInterval(() => {
-  const keywords = summary.summary(txt);
+  const slides = [];
+  text = text.replace("\"", '');
 
-  console.log("Keywords : " + keywords);
+  // Split text into slides based off keyword
+  for (let keyword of nextSlideKeywords) {
+    text = text.split(keyword).join(',');
+  }
 
-  if (oldSize < keywords.length) {
-    const newKeywords = keywords.slice(oldSize, keywords.length);
+  const slideText = text.split(',');
 
+  for (let text of slideText) {
     const slide = new Slide();
 
-    const first = newKeywords.pop();
+    const t = new Text(text);
 
-    const t = new Title(first);
     slide.addObj(t);
-
-    const b = new Bullet(newKeywords);
-    slide.addObj(b);
 
     slides.push(slide);
   }
 
-  // Generate mdx file
   genSlides(slides);
-
-  oldSize = keywords.length;
 }, 1000);
 
 const genSlides = (slides) => {
