@@ -30,7 +30,7 @@ class Title {
   }
 
   toMdx() {
-    return " # " + this.txt.trim().toUpperCase() + '\n';
+    return "# " + this.txt.trim().toUpperCase() + '\n';
   }
 }
 
