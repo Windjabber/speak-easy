@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "http": "0.0.0",
     "keyword-extractor": "0.0.18",
     "nodejs-text-summarizer": "^2.0.3"
   }
