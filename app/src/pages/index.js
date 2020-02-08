@@ -32,7 +32,6 @@ class Start extends Component {
                 method: 'POST',
                 body: JSON.stringify(finalTranscript)
             });
-            resetTranscript();
         }
 
         return (
