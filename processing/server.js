@@ -2,6 +2,7 @@ const fs = require('fs');
 const http = require('http');
 
 const slide = require('./slide');
+const speech = require('./speech');
 
 const Slide = slide.Slide;
 const Text = slide.Text;
@@ -11,12 +12,14 @@ const Title = slide.Title;
 let text = '';
 
 http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  console.log("Request received");
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    console.log("Request received");
 
-  let body = [];
-  req.on('data', (chunk) => {
-    body.push(chunk);
+    // Dodgy routing code
+    const url = req.url;
+    if (url === '/start') {
+        speech.startListening()
+    }
 
     text = Buffer.concat(body).toString().toLowerCase();
   });
@@ -51,17 +54,17 @@ setInterval(() => {
 }, 1000);
 
 const genSlides = (slides) => {
-  fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
-    if (err) throw err;
-  });
+    fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
+        if (err) throw err;
+    });
 };
 
 const slidesToMdx = (slides) => {
-  let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.";
+    let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.";
 
-  for (let s of slides) {
-    str += s.toMdx();
-  }
+    for (let s of slides) {
+        str += s.toMdx();
+    }
 
-  return str;
+    return str;
 };

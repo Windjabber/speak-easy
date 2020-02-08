@@ -7,32 +7,10 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import '../styles/start.css';
 
+
 class Start extends Component {
 
-    state = {
-        finalTranscript: ""
-    };
-
     render() {
-        let {
-            finalTranscript,
-            browserSupportsSpeechRecognition,
-            startListening,
-            resetTranscript,
-        } = this.props;
-
-        if (!browserSupportsSpeechRecognition) {
-            return <p>Your browser does not support speech recognition ):</p>
-        }
-
-        console.log(finalTranscript);
-
-        if (finalTranscript !== '') {
-            fetch('http://localhost:8080', {
-                method: 'POST',
-                body: JSON.stringify(finalTranscript)
-            });
-        }
 
         return (
             <>
@@ -46,7 +24,11 @@ class Start extends Component {
                             style={{border: 'none', marginLeft: 'auto', marginRight: 'auto', backgroundColor: 'white'}}
                             onClick={() => {
                                 console.log("Starting");
-                                startListening()
+
+                                fetch('http://localhost:8080/start', {
+                                    method: 'POST',
+                                });
+
                             }}
                         >
                             <FontAwesomeIcon icon={faMicrophone} size={"8x"} color="white" style={{
