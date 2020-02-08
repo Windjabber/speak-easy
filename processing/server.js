@@ -9,7 +9,7 @@ const Bullet = slide.Bullet;
 const Title = slide.Title;
 const Next = slide.Next;
 
-let text = 'hello there next slide my name is james moving on now let\'s talk about react image cat hello';
+let text = 'Welcome we are speak easy next slide my name is james moving on now let\'s talk about react';
 
 // http.createServer(function (req, res) {
 //   res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -31,21 +31,36 @@ const keywordMappings = [
     keywords: ['next', 'slide'],
     skip: 2,
     gen: (objs, words, i) => {
-      objs.push(new Next())
+      objs.push(new Next());
     }
   },
   {
     keywords: ['moving', 'on', 'now'],
     skip: 2,
     gen: (objs, words, i) => {
-      objs.push(new Next())
+      objs.push(new Next());
     }
   },
   {
     keywords: ['image'],
     skip: 2,
     gen: (objs, words, i) => {
-      objs.push(new Text("Imge: " + words[i + 1]))
+      objs.push(new Text("Imge: " + words[i + 1]));
+    }
+  },
+  {
+    keywords: ['welcome'],
+    skip: 1,
+    gen: (objs, words, i) => {
+      objs.push(new Title("Welcome!!!"));
+      objs.push(new Next());
+    }
+  },
+  {
+    keywords: ['we', 'are'],
+    skip: 2,
+    gen: (objs, words, i) => {
+      objs.push(new Title("We are..."));
     }
   }
 ];
@@ -68,7 +83,7 @@ const keywordMappings = [
 
 const objs = [];
 
-text = text.replace("\"", '');
+text = text.replace("\"", '').toLowerCase();
 
 let curText = '';
 const words = text.split(" ");
@@ -109,7 +124,7 @@ for (var i = 0; i < words.length; i++) {
 objs.push(new Text(curText));
 
 const slidesToMdx = (slides) => {
-    let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.\n---\n\n";
+    let str = "---\ntitle: \"Simpsons\"\npath: /test\ndesc: d.\nlocation: l.\n---\n\nimport { Utils, FullscreenImage } from '../../src/components'";
 
     for (let s of slides) {
         str += s.toMdx();
@@ -118,10 +133,10 @@ const slidesToMdx = (slides) => {
     return str;
 };
 
-console.log(slidesToMdx(objs));
-
 const genSlides = (slides) => {
     fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
         if (err) throw err;
     });
 };
+
+genSlides(objs);

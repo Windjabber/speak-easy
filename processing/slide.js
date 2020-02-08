@@ -4,7 +4,7 @@ class Text {
   }
 
   toMdx() {
-    return this.txt + '\n';
+    return this.txt.trim() + '\n';
   }
 }
 
@@ -30,7 +30,7 @@ class Title {
   }
 
   toMdx() {
-    return " # " + this.txt.toUpperCase() + '\n';
+    return " # " + this.txt.trim().toUpperCase() + '\n';
   }
 }
 
