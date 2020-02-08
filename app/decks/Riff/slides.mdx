@@ -1,32 +1,25 @@
 ---
-title: "A SAMPLE DECK"
-path: /SAMPLEPRES
-desc: This is a sample presentation.
-location: You're welcome
+title: "Let's Riff"
+path: /riff
+desc: Let's go with the flow and present.
+location: Right here. Right now.
 ---
 
-import SEO from '../../src/components/seo';
-import Controls from '../../src/components/Controls';
-import OrReactComponents from "./OrReactComponents"
-
-<Controls />
-
-<h4>HEY THERE </h4>
+# :wave:
 
 ---
 
-# This is a sample deck
+---
+import { Appear } from 'gatsby-theme-mdx-deck'
 
-(Hope its helpful)
+<Appear>
+  <div>beep</div>
+  <div>boop</div>
+</Appear>
 
 ---
 
-<h3>You can also add html</h3>
-
----
-
-<OrReactComponents/>
-
----
-
-# fin.
+import { Invert } from 'gatsby-theme-mdx-deck'
+<Invert>
+<h1> New Features</h1>
+</Invert>
