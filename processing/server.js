@@ -4,6 +4,7 @@ const http = require('http');
 const summary = require('./processing');
 const Slide = require('./slide').Slide;
 const Text = require('./slide').Text;
+const Bullet = require('./slide').Bullet;
 
 let txt = '';
 
@@ -32,15 +33,13 @@ setInterval(() => {
   if (oldSize < keywords.length) {
     const newKeywords = keywords.slice(oldSize, keywords.length);
 
-    for (let k of newKeywords) {
-      const slide = new Slide();
+    const slide = new Slide();
 
-      const t = new Text(k);
+    const b = new Bullet(newKeywords);
 
-      slide.addObj(t);
+    slide.addObj(b);
 
-      slides.push(slide);
-    }
+    slides.push(slide);
   }
 
   fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {

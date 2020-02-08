@@ -20,7 +20,7 @@ class Slide {
 
 class Text {
   constructor(txt) {
-      this.txt = txt
+    this.txt = txt
   }
 
   toMdx() {
@@ -28,4 +28,20 @@ class Text {
   }
 }
 
-module.exports = { Slide, Text };
+class Bullet {
+  constructor(points) {
+    this.points = points;
+  }
+
+  toMdx() {
+    let str = '';
+
+    for (let point of this.points) {
+      str += ' - ' + point + '\n';
+    }
+
+    return str;
+  }
+}
+
+module.exports = { Slide, Text, Bullet };
