@@ -47,14 +47,14 @@ class Title {
 class Next {
 
   toMdx(last) {
-    return "\n\n---\n\n";
+    return SLIDE_END;
   }
 }
 
 class SoftNext {
   toMdx(last) {
     console.log(last);
-    return last ? '' : '\n\n---\n\n';
+    return last ? '' : SLIDE_END;
   }
 }
 
