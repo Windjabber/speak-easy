@@ -3,6 +3,16 @@ const http = require('http');
 
 const slide = require('./slide');
 const speech = require('./speech');
+const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
+const { IamAuthenticator } = require('ibm-watson/auth');
+
+const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
+  version: '2019-07-12',
+  authenticator: new IamAuthenticator({
+    apikey: '_bVh3Ed2RN57gsK9Yj-_CrWBfoAWtBpxVcSRec4h9IND',
+  }),
+  url: 'https://api.eu-gb.natural-language-understanding.watson.cloud.ibm.com/instances/0c236b5e-6172-4b95-9ba1-f98be60cac0c',
+});
 
 const Text = slide.Text;
 const Bullet = slide.Bullet;
@@ -140,53 +150,101 @@ const keywordMappings = [
     }
 ];
 
-const parse = (text) => {
-    const objs = [];
+let lastSeenText = "";
+let lastSeenRoles = [];
 
-    text = text.replace("\"", '').replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
+const getSemanticRoles = async (text) => {
+  if (text.length < 20) {
+    return [];
+  }
+  if (lastSeenText === text) {
+    return lastSeenRoles;
+  }
+  console.log("Issuing request for: ", text);
+  const analyzeParams = {
+    'features': {
+      'semantic_roles': {}
+    },
+    'text': `${text}`
+  };
+  return await naturalLanguageUnderstanding.analyze(analyzeParams)
+    .then(res => {
+      // Process output
+      lastSeenText = text;
+      lastSeenRoles = res["result"]["semantic_roles"];
+      return lastSeenRoles;
+    })
+    .catch(err => {
+      console.log('error:', err);
+    });
+};
 
-    let curText = '';
-    const words = text.split(" ");
-    for (var i = 0; i < words.length; i++) {
-        let matched = false;
-        const word = words[i];
+const processSemanticRoles = (semanticRoles) => {
+  let objs = [];
+  semanticRoles.forEach(semanticRole => {
+    objs.push(new Text(semanticRole["subject"]["text"]));
+    objs.push(new Bullet([semanticRole["action"]["text"] + semanticRole["object"]["text"]]))
+  });
+  return objs;
+};
 
-        for (let mapping of keywordMappings) {
-            let match = true;
+const parse = async (text) => {
+  const objs = [];
 
-            for (var j = 0; j < mapping.keywords.length; j++) {
-                if (words[i + j] !== mapping.keywords[j]) {
-                    match = false;
-                    break;
-                }
-            }
+  text = text.replace("\"", '').replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
 
-            if (match) {
-                matched = true;
+  let curText = '';
+  const words = text.split(" ");
+  for (var i = 0; i < words.length; i++) {
+    let matched = false;
+    const word = words[i];
 
-                if (curText !== '') {
-                    objs.push(new Text(curText));
-                    curText = '';
-                }
+    for (let mapping of keywordMappings) {
+      let match = true;
 
-                i += mapping.gen(objs, words, i);
+      for (var j = 0; j < mapping.keywords.length; j++) {
+        if (words[i + j] !== mapping.keywords[j]) {
+          match = false;
+          break;
+        }
+      }
 
-                break;
-            }
+      if (match) {
+        matched = true;
+
+        if (curText !== '') {
+          objs.push(new Text(curText));
+          curText = '';
         }
 
-        if (!matched) {
-            curText += ' ' + word;
-        }
+        i += mapping.gen(objs, words, i);
+
+        break;
+      }
     }
 
-    if (curText !== '') objs.push(new Text(curText));
+    if (!matched) {
+      curText += ' ' + word;
+    }
+  }
 
-    return objs;
+  if (curText !== '') {
+    let semanticRoles = await getSemanticRoles(curText);
+    if (semanticRoles) {
+      let semantic_objs = processSemanticRoles(semanticRoles);
+      semantic_objs.forEach(semantic_obj => {
+        objs.push(semantic_obj)
+      })
+    } else {
+      objs.push(new Text(curText));
+    }
+  }
+  console.log(objs);
+  return objs;
 };
 
 const updateLoop = () => {
-    // console.log(phrases);
+    console.log(phrases);
     const text = phrases.join(' ');
     const objs = parse(text);
     genSlides(objs);
