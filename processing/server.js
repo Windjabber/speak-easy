@@ -39,17 +39,17 @@ http.createServer(function (req, res) {
     const url = req.url;
     if (url.indexOf("/start") !== -1) {
 
-      possibleTitle = url.substring(url.lastIndexOf('/') + 1);
-      if (possibleTitle !== "") {
-        title = possibleTitle;
-        fs.mkdirSync(`../app/decks/${title}/`, { recursive: true}, (error) => {
-          if (error) {
-            console.error('Error occured: ', error);
-          } else {
-            console.log(`Your directory is made ../app/decks/${title}/`);
-          }
-        })
-      }
+        possibleTitle = url.substring(url.lastIndexOf('/') + 1);
+        if (possibleTitle !== "") {
+            title = possibleTitle;
+            fs.mkdirSync(`../app/decks/${title}/`, {recursive: true}, (error) => {
+                if (error) {
+                    console.error('Error occured: ', error);
+                } else {
+                    console.log(`Your directory is made ../app/decks/${title}/`);
+                }
+            })
+        }
 
         // search.sendQuery().then(imageResults => {
         //     if (imageResults == null) {
@@ -112,7 +112,7 @@ const processAnalysis = (analysis) => {
     let bulletLists = {};
     let lastBullet = "";
     for (let i = 0; i < analysis["semantic_roles"].length; i++) {
-     let semanticRole = analysis["semantic_roles"][i];
+        let semanticRole = analysis["semantic_roles"][i];
         if (!"text" in semanticRole["subject"]) {
             return;
         }
@@ -121,7 +121,7 @@ const processAnalysis = (analysis) => {
         if (subject in bulletLists) {
             bulletLists[subject].push(point);
             lastBullet = subject;
-        }else if (subject.toLowerCase() === "it" && lastBullet in bulletLists) {
+        } else if (subject.toLowerCase() === "it" && lastBullet in bulletLists) {
             bulletLists[lastBullet].push(point);
         } else {
             bulletLists[subject] = [point];
@@ -163,7 +163,7 @@ const parse = async (text) => {
             if (match) {
                 const r = mapping.gen(objs, words, i);
                 if (r === -1) {
-                  break;
+                    break;
                 }
 
                 matched = true;
@@ -195,15 +195,21 @@ const parse = async (text) => {
     }
 
     if (curText !== '') {
-        let semanticRoles = await getSemanticRoles(curText);
-        if (semanticRoles) {
-            let semanticObjs = processAnalysis(semanticRoles);
-            semanticObjs.forEach(semanticObj => {
-                objs.push(semanticObj)
-            })
-        } else {
-            objs.push(Promise.resolve(new Text(curText)));
+        try {
+
+            let semanticRoles = await getSemanticRoles(curText);
+            if (semanticRoles) {
+                let semanticObjs = processAnalysis(semanticRoles);
+                semanticObjs.forEach(semanticObj => {
+                    objs.push(semanticObj)
+                })
+            } else {
+                objs.push(Promise.resolve(new Text(curText)));
+            }
+        } catch {
+            console.log("Failed to retrieve semantic roles")
         }
+
     }
 
     objs.push(Promise.resolve(new SoftNext()));
@@ -239,13 +245,13 @@ import { Utils, FullscreenImage, GifImage } from '../../src/components'
         let restSoft = true;
 
         for (let j = i; j < slides.length; j++) {
-          if (!(slides[j] instanceof SoftNext)) {
-            restSoft = false;
-            break;
-          }
+            if (!(slides[j] instanceof SoftNext)) {
+                restSoft = false;
+                break;
+            }
         }
 
-        str += s.toMdx (restSoft);
+        str += s.toMdx(restSoft);
         str += '\n';
     }
 
