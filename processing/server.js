@@ -188,6 +188,8 @@ const updateLoop = async () => {
         objs = objs.concat(o);
     }
 
+    console.log("Objs", objs);
+
     await genSlides(objs);
 };
 
@@ -197,6 +199,7 @@ const objsToMdx = (slides) => {
     for (let i = 0; i < slides.length; i++) {
         const s = slides[i];
         str += s.toMdx(i === slides.length - 1);
+        str += '\n';
     }
 
     str += UTILS;

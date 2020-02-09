@@ -1,6 +1,7 @@
 const UTILS = `<Utils />`
 
 const SLIDE_END = `
+\n
 
 ${UTILS}
 
