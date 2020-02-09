@@ -47,17 +47,20 @@ class Italics {
   }
 }
 
-class Bullet {
-  constructor(points) {
+class BulletList {
+  constructor(title, points) {
+    this.title = title;
     this.points = points;
   }
 
   toMdx(last) {
-    let str = '';
+    let str = this.title.toProperCase() + '\n';
 
     for (let point of this.points) {
       str += ' - ' + point.toProperCase() + '\n';
     }
+
+    str += '\n\n';
 
     return str;
   }
@@ -86,4 +89,4 @@ class SoftNext {
   }
 }
 
-module.exports = { Text, Bullet, Title, Next, SoftNext, Italics, GifImage, UTILS, SLIDE_END };
+module.exports = { Text, BulletList, Title, Next, SoftNext, Italics, GifImage, UTILS, SLIDE_END };
