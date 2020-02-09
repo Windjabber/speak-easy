@@ -2,6 +2,11 @@ public
 .cache
 node_modules
 package-lock.json
+<<<<<<< HEAD
 *.mdx
 !BufFixPres
 app/decks/Riff
+=======
+app/decks/riff/*
+app/decks/Riff/*
+>>>>>>> 28f00b817cd88719047dd59a9d287330da51c314
