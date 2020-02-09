@@ -108,9 +108,9 @@ const getSemanticRoles = async (text) => {
 };
 
 const emotion_to_colour = {
-    "sadness": "blue",
-    "joy": "green",
-    "anger": "red"
+    "sadness": "is-blue",
+    "joy": "is-green",
+    "anger": "is-red"
 };
 
 function extractColouredWords(analysis) {
@@ -156,11 +156,10 @@ const processAnalysis = (analysis) => {
             lastBullet = subject;
         }
     }
-    let colouredWords = extractColouredWords(analysis);
     for (let s in bulletLists) {
         let points = bulletLists[s];
         for (let i = 0; i < points.length; i++) {
-            objs.push(new BulletList(s, [points[i]], colouredWords));
+            objs.push(new BulletList(s, [points[i]]));
         }
     }
 
@@ -171,7 +170,7 @@ const parse = async (text) => {
     let objs = [];
     
     let caseWords = text.split(" ");
-    
+
     let processedText = text.replace("\"", '').replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
 
     let curText = '';
