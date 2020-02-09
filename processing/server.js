@@ -37,7 +37,7 @@ title: \"Let's Riff!\"
 path: /riff
 ---
 
-import { Utils, FullscreenImage } from '../../src/components'
+import { Utils, FullscreenImage, GifImage } from '../../src/components'
 
 `;
 
