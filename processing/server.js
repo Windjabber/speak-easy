@@ -134,6 +134,11 @@ const parse = async (text) => {
             }
 
             if (match) {
+                const r = mapping.gen(objs, words, i);
+                if (r === -1) {
+                  break;
+                }
+                
                 matched = true;
 
                 if (curText !== '') {
@@ -141,7 +146,7 @@ const parse = async (text) => {
                     curText = '';
                 }
 
-                i += mapping.gen(objs, words, i);
+                i += r
 
                 break;
             }
@@ -187,8 +192,6 @@ const updateLoop = async () => {
         objs = objs.concat(o);
     }
 
-    console.log("Objs", objs);
-
     await genSlides(objs);
 };
 
@@ -197,7 +200,17 @@ const objsToMdx = (slides) => {
 
     for (let i = 0; i < slides.length; i++) {
         const s = slides[i];
-        str += s.toMdx (i === slides.length - 1);
+
+        let restSoft = true;
+
+        for (let j = i; j < slides.length; j++) {
+          if (!(slides[j] instanceof SoftNext)) {
+            restSoft = false;
+            break;
+          }
+        }
+
+        str += s.toMdx (restSoft);
         str += '\n';
     }
 
