@@ -9,12 +9,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@azure/cognitiveservices-imagesearch": "^3.0.0",
     "@google-cloud/speech": "^3.6.0",
-    "http": "0.0.0",
-    "keyword-extractor": "0.0.18",
-    "node-record-lpcm16": "^1.0.1",
-    "nodejs-text-summarizer": "^2.0.3",
+    "azure-cognitiveservices-imagesearch": "^2.0.0",
     "chalk": "latest",
-    "ibm-watson": "latest"
+    "http": "0.0.0",
+    "ibm-watson": "latest",
+    "keyword-extractor": "0.0.18",
+    "ms-rest-azure": "^3.0.0",
+    "node-record-lpcm16": "^1.0.1",
+    "nodejs-text-summarizer": "^2.0.3"
   }
 }

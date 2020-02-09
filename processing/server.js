@@ -3,6 +3,8 @@ const http = require('http');
 
 const slide = require('./slide');
 const speech = require('./speech');
+const search = require('./search');
+
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
 const { IamAuthenticator } = require('ibm-watson/auth');
 
@@ -42,6 +44,24 @@ http.createServer(function (req, res) {
     // Dodgy routing code
     const url = req.url;
     if (url === '/start') {
+
+
+        search.sendQuery().then(imageResults => {
+            if (imageResults == null) {
+                console.log("No image results were found.");
+            }
+            else {
+                console.log(`Total number of images returned: ${imageResults.value.length}`);
+                let firstImageResult = imageResults.value[0];
+                //display the details for the first image result. After running the application,
+                //you can copy the resulting URLs from the console into your browser to view the image.
+                console.log(`Total number of images found: ${imageResults.value.length}`);
+                console.log(`Copy these URLs to view the first image returned:`);
+                console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
+                console.log(`First image content url: ${firstImageResult.contentUrl}`);
+            }
+        })
+            .catch(err => console.error(err))
         speech.startListening(phrases);
         setInterval(updateLoop, 1000);
     }
@@ -790,7 +810,7 @@ const slidesToMdx = (slides) => {
 };
 
 const genSlides = (slides) => {
-    fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
+    fs.writeFile('../app/decks/riff/slides.mdx', slidesToMdx(slides), function (err) {
         if (err) throw err;
     });
 };
