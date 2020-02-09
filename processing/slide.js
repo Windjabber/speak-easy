@@ -21,7 +21,7 @@ function addColoursToWords(text, colouredWords) {
   for (let colour in colouredWords) {
     let words = colouredWords[colour];
     words.forEach( word => {
-      text = text.replace(word, `<span style="color:${colour}">${word}</span>`)
+      text = text.replace(word, `<p class="${colour}">${word}</p>`)
     })
   }
   return text;
