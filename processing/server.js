@@ -176,6 +176,13 @@ const keywordMappings = [
             }
             return 2;
         }
+    },
+    {
+        keywords: ['end', 'presentation'],
+        gen: (objs, words, i) => {
+            objs.push(new Title("Thank you!"));
+            return 1;
+        }
     }
 ];
 

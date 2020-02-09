@@ -183,8 +183,6 @@ function infiniteStream(
         );
 
         newStream = true;
-
-        startStream();
     }
 
     // Start recording and send the microphone input to the Speech API
