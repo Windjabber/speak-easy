@@ -707,7 +707,6 @@ const getSemanticRoles = async (text) => {
         'text': `${text}`
     };
 
-    console.log("Sending");
     let res = null;
     try {
         res = await naturalLanguageUnderstanding.analyze(analyzeParams);
@@ -734,10 +733,10 @@ const processSemanticRoles = (semanticRoles) => {
 const parse = async (text) => {
     const objs = [];
 
-    text = text.replace("\"", '').replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
+    let processedText = text.replace("\"", '').replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
 
     let curText = '';
-    const words = text.split(" ");
+    const words = processedText.split(" ");
     for (let i = 0; i < words.length; i++) {
         let matched = false;
         const word = words[i];
@@ -776,14 +775,11 @@ const parse = async (text) => {
         }
     }
 
-    console.log("curtext ", curText);
     if (curText !== '') {
         let semanticRoles = await getSemanticRoles(curText);
-        console.log("Semantic roles " + semanticRoles);
         if (semanticRoles) {
             let semanticObjs = processSemanticRoles(semanticRoles);
             semanticObjs.forEach(semanticObj => {
-                console.log("Semantic obj ", semanticObj)
                 objs.push(semanticObj)
             })
         } else {
@@ -795,10 +791,8 @@ const parse = async (text) => {
 };
 
 const updateLoop = async () => {
-    console.log("Phrases " + phrases);
     const text = phrases.join(' ');
     const objs = await parse(text);
-    console.log("Generating ", objs);
     await genSlides(objs);
 };
 
@@ -817,7 +811,6 @@ const objsToMdx = (slides) => {
 
 const genSlides = async (objs) => {
     let allObjs = await Promise.all(objs);
-    console.log("Write ", allObjs);
     fs.writeFile('../app/decks/riff/slides.mdx', objsToMdx(allObjs), function (err) {
         if (err) throw err;
     });
