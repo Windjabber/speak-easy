@@ -147,9 +147,9 @@ const slidesToMdx = (slides) => {
 };
 
 const genSlides = (slides) => {
-    fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
-        if (err) throw err;
-    });
+  fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
+    if (err) throw err;
+  });
 };
 
 genSlides(objs);
