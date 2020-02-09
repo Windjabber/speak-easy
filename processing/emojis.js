@@ -45,6 +45,7 @@ const emojiMapping = {
     "imp": ":imp:",
     "innocent": ":innocent:",
     "alien": ":alien:",
+    "love": ":heart:",
     "heart": ":heart:",
     "heartbeat": ":heartbeat:",
     "heartpulse": ":heartpulse:",

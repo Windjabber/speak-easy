@@ -54,6 +54,13 @@ const keywordMappings = [
         }
     },
     {
+        keywords: ['hi'],
+        gen: (objs, words, i) => {
+            objs.push(new Text('Hello! 👋'));
+            return 0;
+        }
+    },
+    {
         keywords: ['lets', 'continue', 'on'],
         gen: (objs, words, i) => {
             objs.push(new Next());
@@ -114,7 +121,7 @@ const keywordMappings = [
             objs.push(new Title("We are..."));
             if (i + 2 >= words.length) return -1;
             if (objs.length - 1 >= i + 2) {
-                objs.push(new Italics(words[i + 2]));
+                objs.push(new Italics("Speak easy"));
             }
             return 2;
         }
