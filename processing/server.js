@@ -169,7 +169,7 @@ const processAnalysis = (analysis) => {
 
 const parse = async (text) => {
     let caseWords = text.split(" ");
-
+    let objs = [];
     let processedText = text.replace("\"", '').replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
 
     let curText = '';
