@@ -14,6 +14,7 @@
     "keyword-extractor": "0.0.18",
     "node-record-lpcm16": "^1.0.1",
     "nodejs-text-summarizer": "^2.0.3",
-    "chalk": "latest"
+    "chalk": "latest",
+    "ibm-watson": "latest"
   }
 }
