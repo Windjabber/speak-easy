@@ -568,7 +568,6 @@ const emojiMapping = {
     "aquarius": ":aquarius:",
     "pisces": ":pisces:",
     "ophiuchus": ":ophiuchus:",
-    "a": ":a:",
     "b": ":b:",
     "ab": ":ab:",
     "o2": ":o2:",

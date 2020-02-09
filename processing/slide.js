@@ -8,8 +8,12 @@ ${UTILS}
 
 `;
 
+String.prototype.toTitleCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1)
+};
+
 String.prototype.toProperCase = function () {
-    return this.trim().replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    return this.split(".").map(x => x.trim().toTitleCase()).join(". ");
 };
 
 class GifImage {
@@ -38,7 +42,7 @@ class Italics {
   }
 
   toMdx(last) {
-    return this.txt === '' ? '' : '*' + this.txt.trim() + '*' + '\n';
+    return this.txt === '' ? '' : '*' + this.txt.toProperCase() + '*' + '\n';
   }
 }
 
@@ -51,7 +55,7 @@ class Bullet {
     let str = '';
 
     for (let point of this.points) {
-      str += ' - ' + point.toUpperCase() + '\n';
+      str += ' - ' + point.toProperCase() + '\n';
     }
 
     return str;
