@@ -49,14 +49,10 @@ function infiniteStream(
     encoding,
     sampleRateHertz,
     languageCode,
-    streamingLimit
+    streamingLimit,
+    textObject,
 ) {
     // [START speech_transcribe_infinite_streaming]
-
-    // const encoding = 'LINEAR16';
-    // const sampleRateHertz = 16000;
-    // const languageCode = 'en-US';
-    // const streamingLimit = 10000; // ms - set to low number for demo purposes
 
     const chalk = require('chalk');
     const {Transform} = require('stream');
@@ -118,20 +114,18 @@ function infiniteStream(
             Math.round(stream.results[0].resultEndTime.nanos / 1000000);
 
         // Calculate correct time based on offset from audio sent twice
-        const correctedTime =
-            resultEndTime - bridgingOffset + streamingLimit * restartCounter;
 
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
         let stdoutText = '';
         if (stream.results[0] && stream.results[0].alternatives[0]) {
             stdoutText =
-                correctedTime + ': ' + stream.results[0].alternatives[0].transcript;
+                stream.results[0].alternatives[0].transcript;
         }
 
         if (stream.results[0].isFinal) {
-            process.stdout.write(chalk.green(`${stdoutText}\n`));
-
+            // process.stdout.write(chalk.green(`${stdoutText}\n`));
+            textObject.text = stdoutText;
             isFinalEndTime = resultEndTime;
             lastTranscriptWasFinal = true;
         } else {
@@ -140,7 +134,9 @@ function infiniteStream(
                 stdoutText =
                     stdoutText.substring(0, process.stdout.columns - 4) + '...';
             }
-            process.stdout.write(chalk.red(`${stdoutText}`));
+            // process.stdout.write(chalk.red(`${stdoutText}`));
+            textObject.text = stdoutText;
+
 
             lastTranscriptWasFinal = false;
         }
@@ -237,14 +233,14 @@ function infiniteStream(
 const opts = {
     encoding: 'LINEAR16',
     samplingRateHertz: 16000,
-    languageCode: 'en-US', // Check if en-UK works better?
+    languageCode: 'en-UK',
     streamingLimit: 290000,
 
 };
 
 module.exports = {
-    startListening: function () {
+    startListening: function (textObject) {
         console.log("Listening");
-        infiniteStream(opts.encoding, opts.samplingRateHertz, opts.languageCode, opts.streamingLimit);
+        infiniteStream(opts.encoding, opts.samplingRateHertz, opts.languageCode, opts.streamingLimit, textObject);
     }
 };
