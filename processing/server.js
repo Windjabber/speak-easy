@@ -106,6 +106,34 @@ const getSemanticRoles = async (text) => {
     return lastSeenAnalysis;
 };
 
+const emotion_to_colour = {
+    "sadness": "blue",
+    "joy": "green",
+    "anger": "red"
+};
+
+function extractColouredWords(analysis) {
+    let colouredWords = {};
+    for (let i = 0; i < analysis["keywords"].length; i++) {
+        let keyword = analysis["keywords"][i];
+        let words = keyword["text"].split(" ");
+        if (!"emotion" in keyword) {
+            continue;
+        }
+        for (let emotion in emotion_to_colour) {
+            if (keyword["emotion"][emotion] > 0.5) {
+                if (!(emotion_to_colour[emotion] in colouredWords)) {
+                    colouredWords[emotion_to_colour[emotion]] = [];
+                }
+                words.forEach(word => {
+                    colouredWords[emotion_to_colour[emotion]].push(word)
+                });
+            }
+        }
+    }
+    return colouredWords;
+}
+
 const processAnalysis = (analysis) => {
     let objs = [];
     let bulletLists = {};
@@ -127,11 +155,11 @@ const processAnalysis = (analysis) => {
             lastBullet = subject;
         }
     }
-    console.log(bulletLists);
+    let colouredWords = extractColouredWords(analysis);
     for (let s in bulletLists) {
         let points = bulletLists[s];
         for (let i = 0; i < points.length; i++) {
-            objs.push(new BulletList(s, [points[i]]));
+            objs.push(new BulletList(s, [points[i]], colouredWords));
         }
     }
 
@@ -201,7 +229,7 @@ const parse = async (text) => {
                 objs.push(semanticObj)
             })
         } else {
-            objs.push(Promise.resolve(new Text(curText)));
+            objs.push(Promise.resolve(new Text(curText, colouredWords)));
         }
     }
 
