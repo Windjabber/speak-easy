@@ -22,18 +22,20 @@ const Title = slide.Title;
 const Next = slide.Next;
 const SoftNext = slide.SoftNext;
 const Italics = slide.Italics;
+const GifImage = slide.GifImage;
 const UTILS = slide.UTILS;
 
-const phrases = [];
+// const phrases = [];
+const phrases = ["This is a test", "can we be happy", "please", "angry", "sad", "show me cats"];
 
 let header = `---
-title: \"Simpsons\"
+title: \"Let's Riff!\"
 path: /riff
 desc: d.
 location: l.
 ---
 
-import { Utils, FullscreenImage } from '../../src/components'
+import { Utils, FullscreenImage, GifImage } from '../../src/components'
 
 `;
 
@@ -100,7 +102,7 @@ const emojiMapping = {
 "confounded": ":confounded:",
 "fearful": ":fearful:",
 "persevere": ":persevere:",
-"cry": ":cry:",
+"sad": ":cry:",
 "sob": ":sob:",
 "joy": ":joy:",
 "astonished": ":astonished:",
@@ -656,9 +658,16 @@ const keywordMappings = [
         }
     },
     {
-        keywords: ['image'],
+        keywords: ['show', 'me'],
         gen: (objs, words, i) => {
-            objs.push(new Text("Imge: " + words[i + 1]));
+            objs.push(new GifImage(words[i + 2]));
+            return 3;
+        }
+    },
+    {
+        keywords: ['show'],
+        gen: (objs, words, i) => {
+            objs.push(new GifImage(words[i + 1]));
             return 1;
         }
     },
@@ -763,8 +772,13 @@ const parse = async (text) => {
         break;
       }
 
-      if (word in emojiMapping) {
-        curText += ' ' + emojiMapping[word];
+      if (word.trim() in emojiMapping) {
+        if (curText !== '') {
+          objs.push(new Text(curText))
+          curText = '';
+        }
+        objs.push(new Text(emojiMapping[word]))
+        matched = true;
         break;
       }
     }
@@ -801,7 +815,7 @@ const slidesToMdx = (slides) => {
 
     for (var i = 0; i < slides.length; i++) {
         const s = slides[i];
-        str += s.toMdx(i === slides.length - 1);
+        str += s.toMdx (i === slides.length - 1);
     }
 
     str += UTILS;
@@ -814,3 +828,5 @@ const genSlides = (slides) => {
         if (err) throw err;
     });
 };
+
+updateLoop();

@@ -8,6 +8,16 @@ ${UTILS}
 
 `;
 
+class GifImage {
+  constructor(keyword) {
+    this.keyword = keyword
+  }
+
+  toMdx(last) {
+    return `<GifImage keyword="${this.keyword.trim()}"/>\n`;
+  }
+}
+
 class Text {
   constructor(txt) {
     this.txt = txt
@@ -66,4 +76,4 @@ class SoftNext {
   }
 }
 
-module.exports = { Text, Bullet, Title, Next, SoftNext, Italics, UTILS, SLIDE_END };
+module.exports = { Text, Bullet, Title, Next, SoftNext, Italics, GifImage, UTILS, SLIDE_END };
