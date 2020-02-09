@@ -725,7 +725,7 @@ const processSemanticRoles = (semanticRoles) => {
     semanticRoles.forEach(semanticRole => {
         console.log("Semantic role ", semanticRole);
         objs.push(new Text(semanticRole["subject"]["text"]));
-        objs.push(new Bullet([semanticRole["action"]["text"] + semanticRole["object"]["text"]]))
+        objs.push(new Bullet([semanticRole["action"]["text"] + ' ' + semanticRole["object"]["text"]]))
     });
     return objs;
 };
@@ -786,7 +786,6 @@ const parse = async (text) => {
             objs.push(Promise.resolve(new Text(curText)));
         }
     }
-    console.log("Returning ", objs);
     return objs;
 };
 
