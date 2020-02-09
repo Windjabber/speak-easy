@@ -26,7 +26,6 @@ const GifImage = slide.GifImage;
 const UTILS = slide.UTILS;
 
 const phrases = [];
-//const phrases = ["This is a test", "can we be happy", "please", "angry", "sad", "show me cats"];
 
 let header = `---
 title: \"Let's Riff!\"
@@ -578,10 +577,8 @@ const emojiMapping = {
     "copyright": ":copyright:",
     "registered": ":registered:",
     "tm": ":tm:",
-    "x": ":x:",
     "bangbang": ":bangbang:",
     "interrobang": ":interrobang:",
-    "o": ":o:",
     "100": ":100:",
     "link": ":link:",
     "trident": ":trident:",
@@ -690,8 +687,9 @@ const keywordMappings = [
         keywords: ['we', 'are'],
         gen: (objs, words, i) => {
             objs.push(new Title("We are..."));
-            // This will crash if there is no word here....
-            objs.push(new Italics(words[i + 2]));
+            if (objs.length - 1 >= i + 2) {
+                objs.push(new Italics(words[i + 2]));
+            }
             return 2;
         }
     }
