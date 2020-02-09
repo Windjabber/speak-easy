@@ -52,8 +52,12 @@ const keywordMappings = [
         keywords: ["reset"],
         gen: (objs, words, i) => {
             // Clear the arrays
-            while (objs.length) { obj.pop(); }
-            while (phrases.length) { phrases.pop(); }
+            while (objs.length) {
+                objs.pop();
+            }
+            while (phrases.length) {
+                phrases.pop();
+            }
             return 0;
         }
     },
@@ -74,20 +78,20 @@ const keywordMappings = [
     },
     {
         keywords: ['hello'],
-    gen: (objs, words, i) => {
-      objs.push(new Text('Hello! 👋'));
-      return 0;
-    }
-  },
-  {
-    keywords: ['lets', 'continue', 'on'],
-    gen: (objs, words, i) => {
-      objs.push(new Next());
-      return 2;
-    }
-  },
-  {
-    keywords: ['moving', 'on', 'now'],
+        gen: (objs, words, i) => {
+            objs.push(new Text('Hello! 👋'));
+            return 0;
+        }
+    },
+    {
+        keywords: ['lets', 'continue', 'on'],
+        gen: (objs, words, i) => {
+            objs.push(new Next());
+            return 2;
+        }
+    },
+    {
+        keywords: ['moving', 'on', 'now'],
         gen: (objs, words, i) => {
             objs.push(new Next());
             return 2;
@@ -95,13 +99,13 @@ const keywordMappings = [
     },
     {
         keywords: ['moving', 'on'],
-    gen: (objs, words, i) => {
-      objs.push(new Next());
-      return 1;
-    }
-  },
-  {
-    keywords: ['image'],
+        gen: (objs, words, i) => {
+            objs.push(new Next());
+            return 1;
+        }
+    },
+    {
+        keywords: ['image'],
         gen: (objs, words, i) => {
             objs.push(new Text("Imge: " + words[i + 1]));
             return 1;
@@ -129,7 +133,8 @@ const keywordMappings = [
         keywords: ['we', 'are'],
         gen: (objs, words, i) => {
             objs.push(new Title("We are..."));
-      objs.push(new Italics(words[i + 2]));
+            // This will crash if there is no word here....
+            objs.push(new Italics(words[i + 2]));
             return 2;
         }
     }
