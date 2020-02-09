@@ -22,18 +22,20 @@ const Title = slide.Title;
 const Next = slide.Next;
 const SoftNext = slide.SoftNext;
 const Italics = slide.Italics;
+const GifImage = slide.GifImage;
 const UTILS = slide.UTILS;
 
-const phrases = [];
+// const phrases = [];
+const phrases = ["This is a test", "can we be happy", "please", "angry", "sad", "show me cats"];
 
 let header = `---
-title: \"Let's Riff\"
+title: \"Let's Riff!\"
 path: /riff
 desc: d.
 location: l.
 ---
 
-import { Utils, FullscreenImage } from '../../src/components'
+import { Utils, FullscreenImage, GifImage } from '../../src/components'
 
 `;
 
@@ -654,9 +656,16 @@ const keywordMappings = [
         }
     },
     {
-        keywords: ['image'],
+        keywords: ['show', 'me'],
         gen: (objs, words, i) => {
-            objs.push(new Text("Imge: " + words[i + 1]));
+            objs.push(new GifImage(words[i + 2]));
+            return 3;
+        }
+    },
+    {
+        keywords: ['show'],
+        gen: (objs, words, i) => {
+            objs.push(new GifImage(words[i + 1]));
             return 1;
         }
     },
@@ -764,10 +773,15 @@ const parse = async (text) => {
                 break;
             }
 
-            if (word in emojiMapping) {
-                curText += ' ' + emojiMapping[word];
-                break;
+          if (word.trim() in emojiMapping) {
+            if (curText !== '') {
+              objs.push(new Text(curText))
+              curText = '';
             }
+            objs.push(new Text(emojiMapping[word]))
+            matched = true;
+            break;
+          }
         }
 
         if (!matched) {
@@ -800,7 +814,7 @@ const objsToMdx = (slides) => {
 
     for (let i = 0; i < slides.length; i++) {
         const s = slides[i];
-        str += s.toMdx(i === slides.length - 1);
+        str += s.toMdx (i === slides.length - 1);
     }
 
     str += UTILS;
@@ -814,3 +828,5 @@ const genSlides = async (objs) => {
         if (err) throw err;
     });
 };
+
+updateLoop();
