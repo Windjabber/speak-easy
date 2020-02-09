@@ -828,5 +828,3 @@ const genSlides = async (objs) => {
         if (err) throw err;
     });
 };
-
-updateLoop();
