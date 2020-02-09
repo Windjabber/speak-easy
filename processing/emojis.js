@@ -53,6 +53,7 @@ const emojiMapping = {
     "sparkles": ":sparkles:",
     "star": ":star:",
     "star2": ":star2:",
+    "speakeasy": ":muscle:",
     "dizzy": ":dizzy:",
     "boom": ":boom:",
     "collision": ":collision:",

@@ -124,6 +124,7 @@ const keywordMappings = [
             if (i + 2 >= words.length) return -1;
             if (objs.length - 1 >= i + 2) {
                 objs.push(new Italics("Speak easy"));
+                objs.push(new Text(":muscle:"));
             }
             return 2;
         }
