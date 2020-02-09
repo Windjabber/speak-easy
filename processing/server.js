@@ -7,8 +7,6 @@ const search = require('./search');
 
 const emojiMapping = require('./emojis');
 const keywordMappings = require('./keyphrases');
-console.log(emojiMapping);
-console.log(keywordMappings);
 
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
 const {IamAuthenticator} = require('ibm-watson/auth');
@@ -31,15 +29,7 @@ const GifImage = slide.GifImage;
 const UTILS = slide.UTILS;
 
 const phrases = [];
-
-let header = `---
-title: \"Let's Riff!\"
-path: /riff
----
-
-import { Utils, FullscreenImage, GifImage } from '../../src/components'
-
-`;
+var title = "riff";
 
 http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -47,23 +37,35 @@ http.createServer(function (req, res) {
 
     // Dodgy routing code
     const url = req.url;
-    if (url === '/start') {
+    if (url.indexOf("/start") !== -1) {
 
-        search.sendQuery().then(imageResults => {
-            if (imageResults == null) {
-                console.log("No image results were found.");
-            } else {
-                console.log(`Total number of images returned: ${imageResults.value.length}`);
-                let firstImageResult = imageResults.value[0];
-                //display the details for the first image result. After running the application,
-                //you can copy the resulting URLs from the console into your browser to view the image.
-                console.log(`Total number of images found: ${imageResults.value.length}`);
-                console.log(`Copy these URLs to view the first image returned:`);
-                console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
-                console.log(`First image content url: ${firstImageResult.contentUrl}`);
-            }
-        })
-            .catch(err => console.error(err))
+        possibleTitle = url.substring(url.lastIndexOf('/') + 1);
+        if (possibleTitle !== "") {
+            title = possibleTitle;
+            fs.mkdirSync(`../app/decks/${title}/`, {recursive: true}, (error) => {
+                if (error) {
+                    console.error('Error occured: ', error);
+                } else {
+                    console.log(`Your directory is made ../app/decks/${title}/`);
+                }
+            })
+        }
+
+        // search.sendQuery().then(imageResults => {
+        //     if (imageResults == null) {
+        //         console.log("No image results were found.");
+        //     } else {
+        //         console.log(`Total number of images returned: ${imageResults.value.length}`);
+        //         let firstImageResult = imageResults.value[0];
+        //         //display the details for the first image result. After running the application,
+        //         //you can copy the resulting URLs from the console into your browser to view the image.
+        //         console.log(`Total number of images found: ${imageResults.value.length}`);
+        //         console.log(`Copy these URLs to view the first image returned:`);
+        //         console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
+        //         console.log(`First image content url: ${firstImageResult.contentUrl}`);
+        //     }
+        // })
+        //     .catch(err => console.error(err))
         speech.startListening(phrases);
         setInterval(updateLoop, 1000);
     }
@@ -99,7 +101,6 @@ const getSemanticRoles = async (text) => {
     } catch (err) {
         console.log(err);
     }
-    console.log("Res: ", JSON.stringify(res, null, 2));
     // Process output
     lastSeenText = text;
     lastSeenAnalysis = res["result"];
@@ -139,7 +140,7 @@ const processAnalysis = (analysis) => {
     let bulletLists = {};
     let lastBullet = "";
     for (let i = 0; i < analysis["semantic_roles"].length; i++) {
-     let semanticRole = analysis["semantic_roles"][i];
+        let semanticRole = analysis["semantic_roles"][i];
         if (!"text" in semanticRole["subject"]) {
             return;
         }
@@ -148,7 +149,7 @@ const processAnalysis = (analysis) => {
         if (subject in bulletLists) {
             bulletLists[subject].push(point);
             lastBullet = subject;
-        }else if (subject.toLowerCase() === "it" && lastBullet in bulletLists) {
+        } else if (subject.toLowerCase() === "it" && lastBullet in bulletLists) {
             bulletLists[lastBullet].push(point);
         } else {
             bulletLists[subject] = [point];
@@ -168,11 +169,12 @@ const processAnalysis = (analysis) => {
 
 const parse = async (text) => {
     const objs = [];
+    let caseWords = text.split(" ");
 
     let processedText = text.replace("\"", '').replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
 
     let curText = '';
-    const words = processedText.split(" ");
+    const words = processedText.split(" ").slice();
     for (let i = 0; i < words.length; i++) {
         let matched = false;
         const word = words[i];
@@ -190,7 +192,7 @@ const parse = async (text) => {
             if (match) {
                 const r = mapping.gen(objs, words, i);
                 if (r === -1) {
-                  break;
+                    break;
                 }
 
                 matched = true;
@@ -217,20 +219,26 @@ const parse = async (text) => {
         }
 
         if (!matched) {
-            curText += ' ' + word;
+            curText += ' ' + caseWords[i];
         }
     }
 
     if (curText !== '') {
-        let semanticRoles = await getSemanticRoles(curText);
-        if (semanticRoles) {
-            let semanticObjs = processAnalysis(semanticRoles);
-            semanticObjs.forEach(semanticObj => {
-                objs.push(semanticObj)
-            })
-        } else {
-            objs.push(Promise.resolve(new Text(curText, colouredWords)));
+        try {
+
+            let semanticRoles = await getSemanticRoles(curText);
+            if (semanticRoles) {
+                let semanticObjs = processAnalysis(semanticRoles);
+                semanticObjs.forEach(semanticObj => {
+                    objs.push(semanticObj)
+                })
+            } else {
+                objs.push(Promise.resolve(new Text(curText)));
+            }
+        } catch {
+            console.log("Failed to retrieve semantic roles")
         }
+
     }
 
     objs.push(Promise.resolve(new SoftNext()));
@@ -250,7 +258,15 @@ const updateLoop = async () => {
 };
 
 const objsToMdx = (slides) => {
-    let str = header;
+
+    let str = `---
+title: \"Let's Riff on: ${title}\"
+path: /${title}
+---
+
+import { Utils, FullscreenImage, GifImage } from '../../src/components'
+
+`;
 
     for (let i = 0; i < slides.length; i++) {
         const s = slides[i];
@@ -258,13 +274,13 @@ const objsToMdx = (slides) => {
         let restSoft = true;
 
         for (let j = i; j < slides.length; j++) {
-          if (!(slides[j] instanceof SoftNext)) {
-            restSoft = false;
-            break;
-          }
+            if (!(slides[j] instanceof SoftNext)) {
+                restSoft = false;
+                break;
+            }
         }
 
-        str += s.toMdx (restSoft);
+        str += s.toMdx(restSoft);
         str += '\n';
     }
 
@@ -275,7 +291,7 @@ const objsToMdx = (slides) => {
 
 const genSlides = async (objs) => {
     let allObjs = await Promise.all(objs);
-    fs.writeFile('../app/decks/riff/slides.mdx', objsToMdx(allObjs), function (err) {
+    fs.writeFile(`../app/decks/${title}/slides.mdx`, objsToMdx(allObjs), function (err) {
         if (err) throw err;
     });
 };

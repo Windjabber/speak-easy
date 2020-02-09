@@ -7,6 +7,8 @@ import '../styles/start.css';
 
 const Start = ({ data }) => {
   const { nodes } = data.allMdx;
+  var words = ['Rock', 'Paper', 'Scissors'];
+  const chosenWord = words[Math.floor(Math.random() * words.length - 1)];
   return (
       <>
       <Layout>
@@ -18,22 +20,27 @@ const Start = ({ data }) => {
             </div>
           </div>
           <div className="row">
-          {nodes.map(item => {
-            const { title, path } = item.frontmatter;
-            return (
-              <div
-                className="col-xs-12 col-md-6 col-lg-4 pad-10-l pad-10-r"
-                onClick={ () => {
-                  fetch('http://localhost:8080/start', {
-                      method: 'POST',
-                  });
-                }
-                }
-              >
-                <Door title={title} path={path} />
-              </div>
-            );
-          })}
+            {nodes.map(item => {
+              const { title, path } = item.frontmatter;
+              return (
+                <div
+                  className="col-xs-12 col-md-6 col-lg-4 pad-10-l pad-10-r"
+                >
+                  <Door title={title} path={path} />
+                </div>
+              );
+            })}
+            <div
+              className="col-xs-12 col-md-6 col-lg-4 pad-10-l pad-10-r"
+              onClick={ () => {
+                fetch(`http://localhost:8080/start/${chosenWord}`, {
+                    method: 'POST',
+                });
+              }
+              }
+            >
+              <Door title={`Let's Riff on: ${chosenWord}`} path={chosenWord} />
+            </div>
           </div>
         </div>
       </Layout>
@@ -43,7 +50,7 @@ const Start = ({ data }) => {
 
 export const query = graphql`
   {
-    allMdx {
+    allMdx(filter: {frontmatter: {title: {glob: "!(Let's Riff on)*"}, path: {ne: "/BugFixPres"}}}) {
       nodes {
         frontmatter {
           path

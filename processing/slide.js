@@ -96,7 +96,6 @@ class Next {
 
 class SoftNext {
   toMdx(last) {
-    console.log(last);
     return last ? '' : SLIDE_END;
   }
 }
