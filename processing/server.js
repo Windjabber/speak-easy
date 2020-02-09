@@ -173,12 +173,20 @@ const parse = async (text) => {
             objs.push(Promise.resolve(new Text(curText)));
         }
     }
+
+    objs.push(Promise.resolve(new SoftNext()));
+
     return objs;
 };
 
 const updateLoop = async () => {
-    const text = phrases.join(' ');
-    const objs = await parse(text);
+    let objs = [];
+
+    for (let phrase of phrases) {
+        const o = await parse(phrase);
+        objs = objs.concat(o);
+    }
+
     await genSlides(objs);
 };
 
