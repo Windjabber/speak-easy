@@ -9,6 +9,7 @@ const Bullet = slide.Bullet;
 const Title = slide.Title;
 const Next = slide.Next;
 const SoftNext = slide.SoftNext;
+const Italics = slide.Italics;
 const UTILS = slide.UTILS;
 
 const phrases = [];
@@ -72,14 +73,35 @@ const keywordMappings = [
         }
     },
     {
-        keywords: ['moving', 'on', 'now'],
+        keywords: ['hello'],
+    gen: (objs, words, i) => {
+      objs.push(new Text('Hello! 👋'));
+      return 0;
+    }
+  },
+  {
+    keywords: ['lets', 'continue', 'on'],
+    gen: (objs, words, i) => {
+      objs.push(new Next());
+      return 2;
+    }
+  },
+  {
+    keywords: ['moving', 'on', 'now'],
         gen: (objs, words, i) => {
             objs.push(new Next());
             return 2;
         }
     },
     {
-        keywords: ['image'],
+        keywords: ['moving', 'on'],
+    gen: (objs, words, i) => {
+      objs.push(new Next());
+      return 1;
+    }
+  },
+  {
+    keywords: ['image'],
         gen: (objs, words, i) => {
             objs.push(new Text("Imge: " + words[i + 1]));
             return 1;
@@ -107,7 +129,8 @@ const keywordMappings = [
         keywords: ['we', 'are'],
         gen: (objs, words, i) => {
             objs.push(new Title("We are..."));
-            return 1;
+      objs.push(new Italics(words[i + 2]));
+            return 2;
         }
     }
 ];

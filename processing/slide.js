@@ -18,6 +18,16 @@ class Text {
   }
 }
 
+class Italics {
+  constructor(txt) {
+    this.txt = txt
+  }
+
+  toMdx(last) {
+    return this.txt === '' ? '' : '*' + this.txt.trim() + '*' + '\n';
+  }
+}
+
 class Bullet {
   constructor(points) {
     this.points = points;
@@ -45,7 +55,6 @@ class Title {
 }
 
 class Next {
-
   toMdx(last) {
     return SLIDE_END;
   }
@@ -58,4 +67,4 @@ class SoftNext {
   }
 }
 
-module.exports = { Text, Bullet, Title, Next, SoftNext, UTILS, SLIDE_END };
+module.exports = { Text, Bullet, Title, Next, SoftNext, Italics, UTILS, SLIDE_END };
