@@ -50,7 +50,7 @@ function infiniteStream(
     sampleRateHertz,
     languageCode,
     streamingLimit,
-    textObject,
+    phrases,
 ) {
     // [START speech_transcribe_infinite_streaming]
 
@@ -70,6 +70,7 @@ function infiniteStream(
         encoding: encoding,
         sampleRateHertz: sampleRateHertz,
         languageCode: languageCode,
+        enableAutomaticPunctuation: true,
     };
 
     const request = {
@@ -86,7 +87,7 @@ function infiniteStream(
     let finalRequestEndTime = 0;
     let newStream = true;
     let bridgingOffset = 0;
-    let lastTranscriptWasFinal = false;
+    let lastTranscriptWasFinal = true;
 
     function startStream() {
         // Clear current audioInput
@@ -108,38 +109,19 @@ function infiniteStream(
     }
 
     const speechCallback = stream => {
-        // Convert API result end time from seconds + nanoseconds to milliseconds
-        resultEndTime =
-            stream.results[0].resultEndTime.seconds * 1000 +
-            Math.round(stream.results[0].resultEndTime.nanos / 1000000);
-
-        // Calculate correct time based on offset from audio sent twice
-
-        process.stdout.clearLine();
-        process.stdout.cursorTo(0);
         let stdoutText = '';
         if (stream.results[0] && stream.results[0].alternatives[0]) {
             stdoutText =
                 stream.results[0].alternatives[0].transcript;
         }
 
-        if (stream.results[0].isFinal) {
-            // process.stdout.write(chalk.green(`${stdoutText}\n`));
-            textObject.text = stdoutText;
-            isFinalEndTime = resultEndTime;
-            lastTranscriptWasFinal = true;
+        if (lastTranscriptWasFinal) {
+            phrases.push(stdoutText);
         } else {
-            // Make sure transcript does not exceed console character length
-            if (stdoutText.length > process.stdout.columns) {
-                stdoutText =
-                    stdoutText.substring(0, process.stdout.columns - 4) + '...';
-            }
-            // process.stdout.write(chalk.red(`${stdoutText}`));
-            textObject.text = stdoutText;
-
-
-            lastTranscriptWasFinal = false;
+            phrases[phrases.length - 1] = stdoutText;
+            console.log(phrases.slice(0, -1) + ' ' + chalk.red(phrases[phrases.length - 1]));
         }
+        lastTranscriptWasFinal = stream.results[0].isFinal;
     };
 
     const audioInputStreamTransform = new Transform({
@@ -239,8 +221,8 @@ const opts = {
 };
 
 module.exports = {
-    startListening: function (textObject) {
+    startListening: function (phrases) {
         console.log("Listening");
-        infiniteStream(opts.encoding, opts.samplingRateHertz, opts.languageCode, opts.streamingLimit, textObject);
+        infiniteStream(opts.encoding, opts.samplingRateHertz, opts.languageCode, opts.streamingLimit, phrases);
     }
 };
