@@ -423,7 +423,6 @@ const emojiMapping = {
     "us": ":us:",
     "fr": ":fr:",
     "es": ":es:",
-    "it": ":it:",
     "ru": ":ru:",
     "gb": ":gb:",
     "uk": ":uk:",
