@@ -31,14 +31,13 @@ const Start = ({ data }) => {
                 }
                 }
               >
-                <AniLink
-                  cover
+                <Link
                   to={`/decks/${path}/slides/0`}
                   bg="#fff"
                 >
                   <div className="door"/>
                   <h4 className="is-bright center-xs">{title}</h4>
-                </AniLink>
+                </Link>
               </div>
             );
           })}

@@ -7,7 +7,6 @@ module.exports = {
     author: `@sld`
   },
   plugins: [
-    `gatsby-plugin-transition-link`,
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-sass`,
     `gatsby-plugin-catch-links`,
