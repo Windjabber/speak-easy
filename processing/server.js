@@ -83,7 +83,7 @@ const keywordMappings = [
     keywords: ['we', 'are'],
     gen: (objs, words, i) => {
       objs.push(new Title("We are..."));
-      objs.push(new Italics(words[i + 1]));
+      objs.push(new Italics(words[i + 2]));
       return 2;
     }
   }

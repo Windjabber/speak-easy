@@ -24,7 +24,7 @@ class Italics {
   }
 
   toMdx(last) {
-    return '*' + this.txt.trim() + '*' + '\n';
+    return this.txt === '' ? '' : '*' + this.txt.trim() + '*' + '\n';
   }
 }
 
