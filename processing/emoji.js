@@ -1,4 +1,4 @@
-export const emojiMapping = {
+const emojiMapping = {
     "bowtie": ":bowtie:",
     "smile": ":smile:",
     "laughing": ":laughing:",
@@ -508,4 +508,8 @@ export const emojiMapping = {
     "link": ":link:",
     "trident": ":trident:",
     "shipit": ":shipit:"
+};
+
+module.exports = {
+    emojiMapping
 };

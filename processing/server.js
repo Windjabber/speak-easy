@@ -4,7 +4,7 @@ const http = require('http');
 const slide = require('./slide');
 const speech = require('./speech');
 const search = require('./search');
-const emojiMapping = require('./emoji');
+const emojiMapping = require('./emoji').emojiMapping;
 
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
 const {IamAuthenticator} = require('ibm-watson/auth');
