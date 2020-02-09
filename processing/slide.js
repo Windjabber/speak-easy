@@ -55,7 +55,6 @@ class Title {
 }
 
 class Next {
-
   toMdx(last) {
     return SLIDE_END;
   }
