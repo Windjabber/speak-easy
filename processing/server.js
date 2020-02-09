@@ -8,10 +8,10 @@ const Text = slide.Text;
 const Bullet = slide.Bullet;
 const Title = slide.Title;
 const Next = slide.Next;
+const SoftNext = slide.SoftNext;
 const UTILS = slide.UTILS;
 
 const textObject = {text: ''};
-// let text = 'Welcome we are speak easy next slide my name is james moving on now let\'s talk about react';
 
 let header = `---
 title: \"Simpsons\"
@@ -39,42 +39,42 @@ http.createServer(function (req, res) {
 }).listen(8080);
 
 const keywordMappings = [
-    {
-        keywords: ['next', 'slide'],
-        gen: (objs, words, i) => {
-            objs.push(new Next());
-            return 1;
-        }
-    },
-    {
-        keywords: ['moving', 'on', 'now'],
-        gen: (objs, words, i) => {
-            objs.push(new Next());
-            return 2;
-        }
-    },
-    {
-        keywords: ['image'],
-        gen: (objs, words, i) => {
-            objs.push(new Text("Imge: " + words[i + 1]));
-            return 1;
-        }
-    },
-    {
-        keywords: ['welcome'],
-        gen: (objs, words, i) => {
-            objs.push(new Title("Welcome!!!"));
-            objs.push(new Next());
-            return 0;
-        }
-    },
-    {
-        keywords: ['we', 'are'],
-        gen: (objs, words, i) => {
-            objs.push(new Title("We are..."));
-            return 1;
-        }
+  {
+    keywords: ['next', 'slide'],
+    gen: (objs, words, i) => {
+      objs.push(new Next());
+      return 1;
     }
+  },
+  {
+    keywords: ['moving', 'on', 'now'],
+    gen: (objs, words, i) => {
+      objs.push(new Next());
+      return 2;
+    }
+  },
+  {
+    keywords: ['image'],
+    gen: (objs, words, i) => {
+      objs.push(new Text("Imge: " + words[i + 1]));
+      return 1;
+    }
+  },
+  {
+    keywords: ['welcome'],
+    gen: (objs, words, i) => {
+      objs.push(new Title("Welcome!!!"));
+      objs.push(new SoftNext());
+      return 0;
+    }
+  },
+  {
+    keywords: ['we', 'are'],
+    gen: (objs, words, i) => {
+      objs.push(new Title("We are..."));
+      return 1;
+    }
+  }
 ];
 
 const parse = (text) => {
@@ -117,7 +117,7 @@ const parse = (text) => {
         }
     }
 
-    objs.push(new Text(curText));
+    if (curText != '' ) objs.push(new Text(curText));
 
     return objs;
 };
@@ -131,8 +131,10 @@ const updateLoop = () => {
 const slidesToMdx = (slides) => {
     let str = header;
 
-    for (let s of slides) {
-        str += s.toMdx();
+    for (var i = 0; i < slides.length; i++) {
+      const s = slides[i];
+      console.log(i, slides.length - 1);
+      str += s.toMdx(i == slides.length - 1);
     }
 
     str += UTILS;
@@ -141,7 +143,7 @@ const slidesToMdx = (slides) => {
 };
 
 const genSlides = (slides) => {
-    fs.writeFile('../app/decks/riff/slides.mdx', slidesToMdx(slides), function (err) {
+    fs.writeFile('../app/decks/test/tests.mdx', slidesToMdx(slides), function (err) {
         if (err) throw err;
     });
 };
