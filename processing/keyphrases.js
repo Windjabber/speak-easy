@@ -119,7 +119,6 @@ const keywordMappings = [
     {
         keywords: ['we', 'are'],
         gen: (objs, words, i) => {
-            console.log("We are");
             objs.push(new Title("We are..."));
             if (i + 2 >= words.length) return -1;
             if (objs.length - 1 >= i + 2) {
