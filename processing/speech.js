@@ -175,13 +175,6 @@ function infiniteStream(
 
         restartCounter++;
 
-        if (!lastTranscriptWasFinal) {
-            process.stdout.write(`\n`);
-        }
-        process.stdout.write(
-            chalk.yellow(`${streamingLimit * restartCounter}: RESTARTING REQUEST\n`)
-        );
-
         newStream = true;
     }
 
