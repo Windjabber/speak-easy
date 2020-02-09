@@ -86,7 +86,8 @@ const getSemanticRoles = async (text) => {
         'features': {
             'semantic_roles': {}
         },
-        'text': `${text}`
+        'text': `${text}`,
+        'language': 'en',
     };
 
     let res = null;
@@ -146,15 +147,15 @@ const parse = async (text) => {
                 break;
             }
 
-          if (word.trim() in emojiMapping) {
-            if (curText !== '') {
-              objs.push(new Text(curText))
-              curText = '';
+            if (word.trim() in emojiMapping) {
+                if (curText !== '') {
+                    objs.push(new Text(curText))
+                    curText = '';
+                }
+                objs.push(new Text(emojiMapping[word]))
+                matched = true;
+                break;
             }
-            objs.push(new Text(emojiMapping[word]))
-            matched = true;
-            break;
-          }
         }
 
         if (!matched) {
@@ -195,7 +196,7 @@ const objsToMdx = (slides) => {
 
     for (let i = 0; i < slides.length; i++) {
         const s = slides[i];
-        str += s.toMdx (i === slides.length - 1);
+        str += s.toMdx(i === slides.length - 1);
     }
 
     str += UTILS;
