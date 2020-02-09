@@ -143,7 +143,7 @@ const processAnalysis = (analysis) => {
 };
 
 const parse = async (text) => {
-    const objs = [];
+    let objs = [];
 
     let processedText = text.replace("\"", '').replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
 
@@ -164,21 +164,21 @@ const parse = async (text) => {
             }
 
             if (match) {
-                const r = mapping.gen(objs, words, i);
-                if (r === -1) {
-                  break;
+                let newObjs = [];
+                const r = mapping.gen(newObjs, words, i);
+
+                if (r !== -1) {
+                  matched = true;
+
+                  if (curText !== '') {
+                      objs.push(new Text(curText));
+                      curText = '';
+                  }
+
+                  objs = objs.concat(newObjs);
+
+                  i += r
                 }
-
-                matched = true;
-
-                if (curText !== '') {
-                    objs.push(new Text(curText));
-                    curText = '';
-                }
-
-                i += r
-
-                break;
             }
 
             if (word.trim() in emojiMapping) {
@@ -226,6 +226,7 @@ const updateLoop = async () => {
 };
 
 const objsToMdx = (slides) => {
+    console.log(slides);
 
     let str = `---
 title: \"Let's Riff on: ${title}\"
