@@ -37,7 +37,7 @@ title: \"Let's Riff!\"
 path: /riff
 ---
 
-import { Utils, FullscreenImage } from '../../src/components'
+import { Utils, FullscreenImage, GifImage } from '../../src/components'
 
 `;
 
@@ -86,7 +86,8 @@ const getSemanticRoles = async (text) => {
         'features': {
             'semantic_roles': {}
         },
-        'text': `${text}`
+        'text': `${text}`,
+        'language': 'en',
     };
 
     let res = null;
@@ -134,6 +135,11 @@ const parse = async (text) => {
             }
 
             if (match) {
+                const r = mapping.gen(objs, words, i);
+                if (r === -1) {
+                  break;
+                }
+
                 matched = true;
 
                 if (curText !== '') {
@@ -141,20 +147,20 @@ const parse = async (text) => {
                     curText = '';
                 }
 
-                i += mapping.gen(objs, words, i);
+                i += r
 
                 break;
             }
 
-          if (word.trim() in emojiMapping) {
-            if (curText !== '') {
-              objs.push(new Text(curText))
-              curText = '';
+            if (word.trim() in emojiMapping) {
+                if (curText !== '') {
+                    objs.push(new Text(curText))
+                    curText = '';
+                }
+                objs.push(new Text(emojiMapping[word]))
+                matched = true;
+                break;
             }
-            objs.push(new Text(emojiMapping[word]))
-            matched = true;
-            break;
-          }
         }
 
         if (!matched) {
@@ -195,7 +201,18 @@ const objsToMdx = (slides) => {
 
     for (let i = 0; i < slides.length; i++) {
         const s = slides[i];
-        str += s.toMdx (i === slides.length - 1);
+
+        let restSoft = true;
+
+        for (let j = i; j < slides.length; j++) {
+          if (!(slides[j] instanceof SoftNext)) {
+            restSoft = false;
+            break;
+          }
+        }
+
+        str += s.toMdx (restSoft);
+        str += '\n';
     }
 
     str += UTILS;

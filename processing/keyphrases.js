@@ -77,6 +77,7 @@ const keywordMappings = [
     {
         keywords: ['show', 'me'],
         gen: (objs, words, i) => {
+            if (i + 2 >= words.length) return -1;
             objs.push(new GifImage(words[i + 2]));
             return 3;
         }
@@ -84,6 +85,7 @@ const keywordMappings = [
     {
         keywords: ['show'],
         gen: (objs, words, i) => {
+            if (i + 1 >= words.length) return -1;
             objs.push(new GifImage(words[i + 1]));
             return 1;
         }
@@ -91,7 +93,7 @@ const keywordMappings = [
     {
         keywords: ['welcome'],
         gen: (objs, words, i) => {
-            objs.push(new Title("Welcome!!!"));
+            objs.push(new Title("Welcome!"));
             objs.push(new SoftNext());
             return 0;
         }
@@ -100,7 +102,7 @@ const keywordMappings = [
         keywords: ['thank', 'you'],
         gen: (objs, words, i) => {
             objs.push(new Next());
-            objs.push(new Title("Thank you!!!"));
+            objs.push(new Title("Thank you!"));
             objs.push(new Text("Any questions?"));
             objs.push(new SoftNext());
             return 1;
@@ -110,6 +112,7 @@ const keywordMappings = [
         keywords: ['we', 'are'],
         gen: (objs, words, i) => {
             objs.push(new Title("We are..."));
+            if (i + 2 >= words.length) return -1;
             if (objs.length - 1 >= i + 2) {
                 objs.push(new Italics(words[i + 2]));
             }

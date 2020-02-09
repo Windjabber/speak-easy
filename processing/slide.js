@@ -1,6 +1,7 @@
 const UTILS = `<Utils />`
 
 const SLIDE_END = `
+\n
 
 ${UTILS}
 
@@ -22,7 +23,7 @@ class GifImage {
   }
 
   toMdx(last) {
-    return `<GifImage keyword="${this.keyword.trim()}"/>\n`;
+    return `\n\n<GifImage keyword="${this.keyword.trim()}"/>\n\n`;
   }
 }
 
@@ -80,6 +81,7 @@ class Next {
 
 class SoftNext {
   toMdx(last) {
+    console.log(last);
     return last ? '' : SLIDE_END;
   }
 }
