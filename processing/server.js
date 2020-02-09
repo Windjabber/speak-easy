@@ -48,6 +48,13 @@ const keywordMappings = [
     }
   },
   {
+    keywords: ['hello'],
+    gen: (objs, words, i) => {
+      objs.push(new Text('Hello! 👋'));
+      return 0;
+    }
+  },
+  {
     keywords: ['moving', 'on', 'now'],
     gen: (objs, words, i) => {
       objs.push(new Next());
