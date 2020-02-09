@@ -17,6 +17,16 @@ String.prototype.toProperCase = function () {
     return this.split(".").map(x => x.trim().toTitleCase()).join(". ");
 };
 
+function addColoursToWords(text, colouredWords) {
+  for (let colour in colouredWords) {
+    let words = colouredWords[colour];
+    words.forEach( word => {
+      text = text.replace(word, `<span style="color:${colour}">${word}</span>`)
+    })
+  }
+  return text;
+}
+
 class GifImage {
   constructor(keyword) {
     this.keyword = keyword
@@ -28,12 +38,13 @@ class GifImage {
 }
 
 class Text {
-  constructor(txt) {
-    this.txt = txt
+  constructor(txt, colouredWords={}) {
+    this.txt = txt;
+    this.colouredWords = colouredWords;
   }
 
   toMdx(last) {
-    return this.txt.toProperCase() + '\n';
+    return addColoursToWords(this.txt.toProperCase(), this.colouredWords) + '\n';
   }
 }
 
@@ -48,16 +59,17 @@ class Italics {
 }
 
 class BulletList {
-  constructor(title, points) {
+  constructor(title, points, colouredWords={}) {
     this.title = title;
     this.points = points;
+    this.colouredWords = colouredWords;
   }
 
   toMdx(last) {
-    let str = this.title.toProperCase() + '\n';
+    let str = addColoursToWords(this.title.toProperCase(), this.colouredWords) + '\n';
 
     for (let point of this.points) {
-      str += ' - ' + point.toProperCase() + '\n';
+      str += ' - ' + addColoursToWords(point.toProperCase(), this.colouredWords) + '\n';
     }
 
     str += '\n\n';
@@ -84,7 +96,6 @@ class Next {
 
 class SoftNext {
   toMdx(last) {
-    console.log(last);
     return last ? '' : SLIDE_END;
   }
 }

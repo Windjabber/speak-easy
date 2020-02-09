@@ -7,8 +7,6 @@ const search = require('./search');
 
 const emojiMapping = require('./emojis');
 const keywordMappings = require('./keyphrases');
-console.log(emojiMapping);
-console.log(keywordMappings);
 
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
 const {IamAuthenticator} = require('ibm-watson/auth');
@@ -41,33 +39,33 @@ http.createServer(function (req, res) {
     const url = req.url;
     if (url.indexOf("/start") !== -1) {
 
-      possibleTitle = url.substring(url.lastIndexOf('/') + 1);
-      if (possibleTitle !== "") {
-        title = possibleTitle;
-        fs.mkdirSync(`../app/decks/${title}/`, { recursive: true}, (error) => {
-          if (error) {
-            console.error('Error occured: ', error);
-          } else {
-            console.log(`Your directory is made ../app/decks/${title}/`);
-          }
-        })
-      }
+        possibleTitle = url.substring(url.lastIndexOf('/') + 1);
+        if (possibleTitle !== "") {
+            title = possibleTitle;
+            fs.mkdirSync(`../app/decks/${title}/`, {recursive: true}, (error) => {
+                if (error) {
+                    console.error('Error occured: ', error);
+                } else {
+                    console.log(`Your directory is made ../app/decks/${title}/`);
+                }
+            })
+        }
 
-        search.sendQuery().then(imageResults => {
-            if (imageResults == null) {
-                console.log("No image results were found.");
-            } else {
-                console.log(`Total number of images returned: ${imageResults.value.length}`);
-                let firstImageResult = imageResults.value[0];
-                //display the details for the first image result. After running the application,
-                //you can copy the resulting URLs from the console into your browser to view the image.
-                console.log(`Total number of images found: ${imageResults.value.length}`);
-                console.log(`Copy these URLs to view the first image returned:`);
-                console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
-                console.log(`First image content url: ${firstImageResult.contentUrl}`);
-            }
-        })
-            .catch(err => console.error(err))
+        // search.sendQuery().then(imageResults => {
+        //     if (imageResults == null) {
+        //         console.log("No image results were found.");
+        //     } else {
+        //         console.log(`Total number of images returned: ${imageResults.value.length}`);
+        //         let firstImageResult = imageResults.value[0];
+        //         //display the details for the first image result. After running the application,
+        //         //you can copy the resulting URLs from the console into your browser to view the image.
+        //         console.log(`Total number of images found: ${imageResults.value.length}`);
+        //         console.log(`Copy these URLs to view the first image returned:`);
+        //         console.log(`First image thumbnail url: ${firstImageResult.thumbnailUrl}`);
+        //         console.log(`First image content url: ${firstImageResult.contentUrl}`);
+        //     }
+        // })
+        //     .catch(err => console.error(err))
         speech.startListening(phrases);
         setInterval(updateLoop, 1000);
     }
@@ -103,19 +101,46 @@ const getSemanticRoles = async (text) => {
     } catch (err) {
         console.log(err);
     }
-    console.log("Res: ", JSON.stringify(res, null, 2));
     // Process output
     lastSeenText = text;
     lastSeenAnalysis = res["result"];
     return lastSeenAnalysis;
 };
 
+const emotion_to_colour = {
+    "sadness": "blue",
+    "joy": "green",
+    "anger": "red"
+};
+
+function extractColouredWords(analysis) {
+    let colouredWords = {};
+    for (let i = 0; i < analysis["keywords"].length; i++) {
+        let keyword = analysis["keywords"][i];
+        let words = keyword["text"].split(" ");
+        if (!"emotion" in keyword) {
+            continue;
+        }
+        for (let emotion in emotion_to_colour) {
+            if (keyword["emotion"][emotion] > 0.5) {
+                if (!(emotion_to_colour[emotion] in colouredWords)) {
+                    colouredWords[emotion_to_colour[emotion]] = [];
+                }
+                words.forEach(word => {
+                    colouredWords[emotion_to_colour[emotion]].push(word)
+                });
+            }
+        }
+    }
+    return colouredWords;
+}
+
 const processAnalysis = (analysis) => {
     let objs = [];
     let bulletLists = {};
     let lastBullet = "";
     for (let i = 0; i < analysis["semantic_roles"].length; i++) {
-     let semanticRole = analysis["semantic_roles"][i];
+        let semanticRole = analysis["semantic_roles"][i];
         if (!"text" in semanticRole["subject"]) {
             return;
         }
@@ -124,18 +149,18 @@ const processAnalysis = (analysis) => {
         if (subject in bulletLists) {
             bulletLists[subject].push(point);
             lastBullet = subject;
-        }else if (subject.toLowerCase() === "it" && lastBullet in bulletLists) {
+        } else if (subject.toLowerCase() === "it" && lastBullet in bulletLists) {
             bulletLists[lastBullet].push(point);
         } else {
             bulletLists[subject] = [point];
             lastBullet = subject;
         }
     }
-    console.log(bulletLists);
+    let colouredWords = extractColouredWords(analysis);
     for (let s in bulletLists) {
         let points = bulletLists[s];
         for (let i = 0; i < points.length; i++) {
-            objs.push(new BulletList(s, [points[i]]));
+            objs.push(new BulletList(s, [points[i]], colouredWords));
         }
     }
 
@@ -143,7 +168,7 @@ const processAnalysis = (analysis) => {
 };
 
 const parse = async (text) => {
-    const objs = [];
+    let caseWords = text.split(" ");
 
     let processedText = text.replace("\"", '').replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "").toLowerCase();
 
@@ -164,21 +189,21 @@ const parse = async (text) => {
             }
 
             if (match) {
-                const r = mapping.gen(objs, words, i);
-                if (r === -1) {
-                  break;
+                let newObjs = [];
+                const r = mapping.gen(newObjs, words, i);
+
+                if (r !== -1) {
+                  matched = true;
+
+                  if (curText !== '') {
+                      objs.push(new Text(curText));
+                      curText = '';
+                  }
+
+                  objs = objs.concat(newObjs);
+
+                  i += r
                 }
-
-                matched = true;
-
-                if (curText !== '') {
-                    objs.push(new Text(curText));
-                    curText = '';
-                }
-
-                i += r
-
-                break;
             }
 
             if (word.trim() in emojiMapping) {
@@ -193,20 +218,26 @@ const parse = async (text) => {
         }
 
         if (!matched) {
-            curText += ' ' + word;
+            curText += ' ' + caseWords[i];
         }
     }
 
     if (curText !== '') {
-        let semanticRoles = await getSemanticRoles(curText);
-        if (semanticRoles) {
-            let semanticObjs = processAnalysis(semanticRoles);
-            semanticObjs.forEach(semanticObj => {
-                objs.push(semanticObj)
-            })
-        } else {
-            objs.push(Promise.resolve(new Text(curText)));
+        try {
+
+            let semanticRoles = await getSemanticRoles(curText);
+            if (semanticRoles) {
+                let semanticObjs = processAnalysis(semanticRoles);
+                semanticObjs.forEach(semanticObj => {
+                    objs.push(semanticObj)
+                })
+            } else {
+                objs.push(Promise.resolve(new Text(curText)));
+            }
+        } catch {
+            console.log("Failed to retrieve semantic roles")
         }
+
     }
 
     objs.push(Promise.resolve(new SoftNext()));
@@ -226,6 +257,7 @@ const updateLoop = async () => {
 };
 
 const objsToMdx = (slides) => {
+    console.log(slides);
 
     let str = `---
 title: \"Let's Riff on: ${title}\"
@@ -242,13 +274,13 @@ import { Utils, FullscreenImage, GifImage } from '../../src/components'
         let restSoft = true;
 
         for (let j = i; j < slides.length; j++) {
-          if (!(slides[j] instanceof SoftNext)) {
-            restSoft = false;
-            break;
-          }
+            if (!(slides[j] instanceof SoftNext)) {
+                restSoft = false;
+                break;
+            }
         }
 
-        str += s.toMdx (restSoft);
+        str += s.toMdx(restSoft);
         str += '\n';
     }
 

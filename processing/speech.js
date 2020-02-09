@@ -97,9 +97,10 @@ function infiniteStream(
             .streamingRecognize(request)
             .on('error', err => {
                 if (err.code === 11) {
-                    // restartStream();
+                    restartStream();
                 } else {
                     console.error('API request error ' + err);
+                    restartStream();
                 }
             })
             .on('data', speechCallback);
@@ -117,6 +118,7 @@ function infiniteStream(
 
         if (lastTranscriptWasFinal) {
             phrases.push(stdoutText);
+            console.log(phrases);
         } else {
             phrases[phrases.length - 1] = stdoutText;
             console.log(phrases.slice(0, -1) + ' ' + chalk.red(phrases[phrases.length - 1]));

@@ -501,7 +501,6 @@ const emojiMapping = {
     "o2": ":o2:",
     "recycle": ":recycle:",
     "end": ":end:",
-    "on": ":on:",
     "soon": ":soon:",
     "copyright": ":copyright:",
     "registered": ":registered:",
