@@ -194,7 +194,7 @@ const parse = async (text) => {
     }
 
     if (curText !== '') {
-        let semanticRoles = await getSemanticRoles(text);
+        let semanticRoles = await getSemanticRoles(curText);
         if (semanticRoles) {
             let semanticObjs = processAnalysis(semanticRoles);
             semanticObjs.forEach(semanticObj => {
