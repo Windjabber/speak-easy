@@ -1,4 +1,7 @@
-$brand-colors: 
+$brand-colors:
+("dark", #121b26),
+("bright", #f2e4c9),
+("highlight", #fff),
 ("white",white),
 ("black",#1C1C1C),
 ("light-brown",#E1D2AF),
@@ -12,6 +15,15 @@ $brand-colors:
 ("red", rgb(201, 88, 107)),
 ("green", rgb(97, 186, 140)),
 ("purple", rgb(144, 101, 245));
+
+$background-color: nth(nth($brand-colors, 1), 2);
+$bright-color: nth(nth($brand-colors, 2), 2);
+$text-color: nth(nth($brand-colors, 3), 2);
+
+body {
+  background-color: $background-color;
+  color: $text-color;
+}
 
 @each $color in $brand-colors {
   .is-#{nth($color,1)}-bg{

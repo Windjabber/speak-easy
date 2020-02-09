@@ -1,48 +1,43 @@
-import React, {Component} from "react";
-import {graphql} from "gatsby";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faMicrophone} from "@fortawesome/free-solid-svg-icons"
+import React from "react";
+import { graphql } from "gatsby";
 import Layout from "../components/layout";
-import SpeechRecognition from 'react-speech-recognition'
-import SEO from "../components/seo";
+import {SpeakEasy, SEO} from "../components";
 import '../styles/start.css';
+import AniLink from "gatsby-plugin-transition-link/AniLink";
 
 
-class Start extends Component {
-
-    render() {
-
-        return (
-            <>
-                <Layout>
-                    <SEO title="Home"/>
-                    <div style={{justifyContent: 'center', textAlign: 'center', alignItems: 'center'}}>
-                        <h1 style={{fontSize: "60pt"}}>
-                            Let's Riff!
-                        </h1>
-                        <button
-                            style={{border: 'none', marginLeft: 'auto', marginRight: 'auto', backgroundColor: 'white'}}
-                            onClick={() => {
-                                console.log("Starting");
-
-                                fetch('http://localhost:8080/start', {
-                                    method: 'POST',
-                                });
-
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faMicrophone} size={"8x"} color="white" style={{
-                                'borderRadius': '150px',
-                                padding: '0.5em 0.65em',
-                                backgroundColor: '#0CD6B5'
-                            }}
-                                             className="start-button"/>
-                        </button>
-                    </div>
-                </Layout>
-            </>
-        );
-    }
+const Start = ({ data }) => {
+  const { nodes } = data.allMdx;
+  return (
+      <>
+      <Layout>
+        <SEO title="Home"/>
+        <div className="container">
+          <div className="row center-xs pad-20-t">
+            <div className="col-xs-6">
+              <SpeakEasy/>
+            </div>
+          </div>
+          <div className="row">
+          {nodes.map(item => {
+            const { path } = item.frontmatter;
+            return (
+              <div className="col-xs-12 col-md-6 col-lg-4 pad-10-l pad-10-r">
+                <AniLink
+                  cover
+                  to={`/decks/${path}/slides/0`}
+                  bg="#fff"
+                >
+                  <div className="door"/>
+                </AniLink>
+              </div>
+            );
+          })}
+          </div>
+        </div>
+      </Layout>
+    </>
+  );
 }
 
 export const query = graphql`
@@ -60,8 +55,4 @@ export const query = graphql`
   }
 `;
 
-const options = {
-    autoStart: false
-};
-
-export default SpeechRecognition(options)(Start);
+export default Start;

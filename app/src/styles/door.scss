@@ -1,0 +1,35 @@
+$border-color: $bright-color;
+$door-color: $bright-color;
+$inner-color: #fff;
+
+.door {
+  width: 180px;
+  height: 310px;
+  margin: 50px auto 0;
+  border: 10px solid $border-color;
+  border-bottom: none;
+  background-color: $inner-color;
+  position: relative;
+
+  &:before {
+    content: " ";
+    width: 180px;
+    height: 310px;
+    display: block;
+    background: $door-color;
+    // transform: perspective(1000px) rotateY(50deg);
+    transform-origin: right;
+  }
+  &:hover:before{
+    animation: doorclose 1s ease forwards;
+  }
+}
+
+@keyframes doorclose {
+  to {
+    transform: perspective(1000px) rotateY(50deg);
+  }
+  from {
+    transform: perspective(0px) rotateY(0deg);
+  }
+}

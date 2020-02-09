@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "gatsby";
 
-const Layout = ({ children }) => {
+const Layout = ({ className, children }) => {
   useEffect(() => {
     const handleEsc = event => {
       if (event.keyCode === 27) {
@@ -18,13 +18,14 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <main>{children}</main>
+      <main className={className}>{children}</main>
     </>
   );
 };
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string
 };
 
 export default Layout;

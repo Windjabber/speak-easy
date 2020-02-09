@@ -66,6 +66,8 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/react-fontawesome": "^0.1.8",
     "gatsby-plugin-google-analytics": "^2.1.23",
+    "gatsby-plugin-transition-link": "^1.17.7",
+    "gsap": "^3.1.1",
     "mdx-deck": "^3.0.13",
     "radium": "^0.26.0",
     "rc-progress": "^2.5.2",

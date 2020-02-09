@@ -1,4 +1,4 @@
-//fonts 
+//fonts
 @import url('https://fonts.googleapis.com/css?family=Lato:700&display=swap');
 
 //files
@@ -12,6 +12,9 @@
 @import "./border.scss";
 @import "./hero.scss";
 @import "./margin_padding.scss";
+@import "./speakeasy.scss";
+@import "./background.scss";
+@import "./door.scss";
 
 @for $i from 1 through 6 {
     h#{7 - $i} {
@@ -23,7 +26,7 @@ body {
     margin: 0px;
 }
 
-h1 { 
+h1 {
     display: block;
     font-size: 2em;
     font-family: Lato;
@@ -34,7 +37,7 @@ h1 {
     font-weight: bold;
   }
 
-  
+
 h2 {
     display: block;
     font-size: 1.5em;
@@ -46,7 +49,7 @@ h2 {
     font-weight: bold;
   }
 
-h3 { 
+h3 {
     display: block;
     font-size: 1.17em;
     font-family: Lato;
@@ -57,7 +60,7 @@ h3 {
     font-weight: bold;
   }
 
-h4 { 
+h4 {
     display: block;
     font-size: 1em;
     font-family: Lato;
@@ -68,7 +71,7 @@ h4 {
     font-weight: bold;
   }
 
-h5 { 
+h5 {
     display: block;
     font-size: 25px;
     font-family: Lato;
@@ -79,7 +82,7 @@ h5 {
     font-weight: bold;
   }
 
-h6 { 
+h6 {
     display: block;
     font-size: .67em;
     font-family: Lato;
@@ -90,7 +93,7 @@ h6 {
     font-weight: bold;
   }
 
-  p { 
+  p {
     display: block;
     font-size: 1em;
     font-family: Lato;

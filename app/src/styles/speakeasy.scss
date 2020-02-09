@@ -1,0 +1,52 @@
+$path_size:
+(10, 311), //S
+(11, 311), //P
+(12, 227), //E
+(13, 241), //A
+(14, 353), //K
+(15, 356), //E
+(16, 247), //A
+(17, 222), //S
+(18, 287); //Y
+
+$text_fill: $bright-color;
+
+$fill_offset: 3s;
+$fill_delay: 2s;
+
+.speakeasy {
+  animation: fill-anim $fill_delay ease forwards $fill_offset;
+}
+
+@each $path in $path_size {
+  .speakeasy path:nth-child(#{nth($path,1)}){
+    stroke-dasharray: nth($path,2);
+    stroke-dashoffset: nth($path,2);
+    stroke: $text_fill;
+    animation: line-anim 2s ease forwards #{(nth($path, 1) - 10)*0.2}s, stroke-anim $fill_delay ease forwards $fill_offset;
+  }
+}
+
+@keyframes fill-anim {
+  from {
+    fill: transparent;
+  }
+  to {
+    fill: $text_fill;
+  }
+}
+
+@keyframes stroke-anim {
+  from {
+    stroke: $text_fill;
+  }
+  to {
+    stroke: transparent;
+  }
+}
+
+@keyframes line-anim {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
