@@ -1,7 +1,7 @@
 import React from "react";
-import { graphql, Link } from "gatsby";
+import { graphql } from "gatsby";
 import Layout from "../components/layout";
-import {SpeakEasy, SEO} from "../components";
+import {SpeakEasy, SEO, Door} from "../components";
 import '../styles/start.css';
 
 
@@ -30,13 +30,7 @@ const Start = ({ data }) => {
                 }
                 }
               >
-                <Link
-                  to={`/decks/${path}/slides/0`}
-                  bg="#fff"
-                >
-                  <div className="door"/>
-                  <h4 className="is-bright center-xs">{title}</h4>
-                </Link>
+                <Door title={title} path={path} />
               </div>
             );
           })}

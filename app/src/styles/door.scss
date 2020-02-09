@@ -1,14 +1,30 @@
-$border-color: $bright-color;
-$door-color: $bright-color;
 $inner-color: #fff;
+
+@each $color in $brand-colors {
+  .door-#{nth($color,1)} {
+    border: 10px solid darken(nth($color,2), 20);
+    background-color: $inner-color;
+
+    &:before {
+      background: nth($color,2);
+    }
+    &:after {
+      background-color: darken(nth($color,2), 20);
+    }
+  }
+
+  .door-#{nth($color,1)} + .door-header {
+    color: nth($color,2);
+  }
+}
+
+
 
 .door {
   width: 180px;
   height: 310px;
   margin: 50px auto 0;
-  border: 10px solid $border-color;
   border-bottom: none;
-  background-color: $inner-color;
   position: relative;
 
   &:before {
@@ -16,12 +32,37 @@ $inner-color: #fff;
     width: 180px;
     height: 310px;
     display: block;
-    background: $door-color;
-    // transform: perspective(1000px) rotateY(50deg);
     transform-origin: right;
   }
-  &:hover:before{
+  &:hover:before {
     animation: doorclose 1s ease forwards;
+  }
+
+  &:hover:after {
+    animation: doorknob 1.4s ease forwards;
+  }
+
+  &:after {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    z-index: 10;
+    display: block;
+    content: ' ';
+    width: 18px;
+    height: 18px;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+  }
+}
+
+@keyframes doorknob {
+  to {
+    transform: perspective(1000px) rotateY(50deg) translateX(80px);
+  }
+  from {
+    transform: perspective(0px) rotateY(0deg) translateX(0px);
   }
 }
 
