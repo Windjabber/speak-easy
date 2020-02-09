@@ -8,6 +8,10 @@ ${UTILS}
 
 `;
 
+String.prototype.toProperCase = function () {
+    return this.trim().replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
 class GifImage {
   constructor(keyword) {
     this.keyword = keyword
@@ -24,7 +28,7 @@ class Text {
   }
 
   toMdx(last) {
-    return this.txt.trim() + '\n';
+    return this.txt.toProperCase() + '\n';
   }
 }
 
