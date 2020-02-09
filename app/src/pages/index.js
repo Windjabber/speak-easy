@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { graphql } from "gatsby";
 import Layout from "../components/layout";
 import {SpeakEasy, SEO, Door} from "../components";
@@ -8,7 +8,13 @@ import '../styles/start.css';
 const Start = ({ data }) => {
   const { nodes } = data.allMdx;
   var words = ['Rock', 'Paper', 'Scissors'];
-  const chosenWord = words[Math.floor(Math.random() * words.length - 1)];
+
+  const [chosenWord, setChosenWord] = useState("Rock");
+
+  useEffect(() => {
+    setChosenWord(words[Math.floor(Math.random() * words.length)]);
+  }, [])
+
   return (
       <>
       <Layout>
