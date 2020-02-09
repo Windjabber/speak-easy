@@ -22,7 +22,7 @@ const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
 });
 
 const Text = slide.Text;
-const Bullet = slide.Bullet;
+const BulletList = slide.BulletList;
 const Title = slide.Title;
 const Next = slide.Next;
 const SoftNext = slide.SoftNext;
@@ -76,19 +76,22 @@ http.createServer(function (req, res) {
 }).listen(8080);
 
 let lastSeenText = "";
-let lastSeenRoles = [];
+let lastSeenAnalysis = [];
 
 const getSemanticRoles = async (text) => {
     if (text.length < 20) {
         return false;
     }
     if (lastSeenText === text) {
-        return lastSeenRoles;
+        return lastSeenAnalysis;
     }
     console.log("Issuing request for: ", text);
     const analyzeParams = {
         'features': {
-            'semantic_roles': {}
+            'semantic_roles': {},
+            'keywords': {
+                'emotion': true
+            }
         },
         'text': `${text}`,
         'language': 'en',
@@ -100,20 +103,42 @@ const getSemanticRoles = async (text) => {
     } catch (err) {
         console.log(err);
     }
-    console.log("Res " + res);
+    console.log("Res: ", JSON.stringify(res, null, 2));
     // Process output
     lastSeenText = text;
-    lastSeenRoles = res["result"]["semantic_roles"];
-    return lastSeenRoles;
+    lastSeenAnalysis = res["result"];
+    return lastSeenAnalysis;
 };
 
-const processSemanticRoles = (semanticRoles) => {
+const processAnalysis = (analysis) => {
     let objs = [];
-    semanticRoles.forEach(semanticRole => {
-        console.log("Semantic role ", semanticRole);
-        objs.push(new Text(semanticRole["subject"]["text"]));
-        objs.push(new Bullet([semanticRole["action"]["text"] + ' ' + semanticRole["object"]["text"]]))
-    });
+    let bulletLists = {};
+    let lastBullet = "";
+    for (let i = 0; i < analysis["semantic_roles"].length; i++) {
+     let semanticRole = analysis["semantic_roles"][i];
+        if (!"text" in semanticRole["subject"]) {
+            return;
+        }
+        const subject = semanticRole["subject"]["text"];
+        const point = semanticRole["action"]["text"] + ' ' + semanticRole["object"]["text"];
+        if (subject in bulletLists) {
+            bulletLists[subject].push(point);
+            lastBullet = subject;
+        }else if (subject.toLowerCase() === "it" && lastBullet in bulletLists) {
+            bulletLists[lastBullet].push(point);
+        } else {
+            bulletLists[subject] = [point];
+            lastBullet = subject;
+        }
+    }
+    console.log(bulletLists);
+    for (let s in bulletLists) {
+        let points = bulletLists[s];
+        for (let i = 0; i < points.length; i++) {
+            objs.push(new BulletList(s, [points[i]]));
+        }
+    }
+
     return objs;
 };
 
@@ -158,10 +183,10 @@ const parse = async (text) => {
 
             if (word.trim() in emojiMapping) {
                 if (curText !== '') {
-                    objs.push(new Text(curText))
+                    objs.push(new Text(curText));
                     curText = '';
                 }
-                objs.push(new Text(emojiMapping[word]))
+                objs.push(new Text(emojiMapping[word]));
                 matched = true;
                 break;
             }
@@ -175,7 +200,7 @@ const parse = async (text) => {
     if (curText !== '') {
         let semanticRoles = await getSemanticRoles(curText);
         if (semanticRoles) {
-            let semanticObjs = processSemanticRoles(semanticRoles);
+            let semanticObjs = processAnalysis(semanticRoles);
             semanticObjs.forEach(semanticObj => {
                 objs.push(semanticObj)
             })
