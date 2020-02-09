@@ -31,15 +31,7 @@ const GifImage = slide.GifImage;
 const UTILS = slide.UTILS;
 
 const phrases = [];
-
-let header = `---
-title: \"Let's Riff!\"
-path: /riff
----
-
-import { Utils, FullscreenImage, GifImage } from '../../src/components'
-
-`;
+var title = "riff";
 
 http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -47,7 +39,19 @@ http.createServer(function (req, res) {
 
     // Dodgy routing code
     const url = req.url;
-    if (url === '/start') {
+    if (url.indexOf("/start") !== -1) {
+
+      possibleTitle = url.substring(url.lastIndexOf('/') + 1);
+      if (possibleTitle !== "") {
+        title = possibleTitle;
+        fs.mkdirSync(`../app/decks/${title}/`, { recursive: true}, (error) => {
+          if (error) {
+            console.error('Error occured: ', error);
+          } else {
+            console.log(`Your directory is made ../app/decks/${title}/`);
+          }
+        })
+      }
 
         search.sendQuery().then(imageResults => {
             if (imageResults == null) {
@@ -222,7 +226,15 @@ const updateLoop = async () => {
 };
 
 const objsToMdx = (slides) => {
-    let str = header;
+
+    let str = `---
+title: \"Let's Riff on: ${title}\"
+path: /${title}
+---
+
+import { Utils, FullscreenImage, GifImage } from '../../src/components'
+
+`;
 
     for (let i = 0; i < slides.length; i++) {
         const s = slides[i];
@@ -247,7 +259,7 @@ const objsToMdx = (slides) => {
 
 const genSlides = async (objs) => {
     let allObjs = await Promise.all(objs);
-    fs.writeFile('../app/decks/riff/slides.mdx', objsToMdx(allObjs), function (err) {
+    fs.writeFile(`../app/decks/${title}/slides.mdx`, objsToMdx(allObjs), function (err) {
         if (err) throw err;
     });
 };
