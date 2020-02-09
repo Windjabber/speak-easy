@@ -35,11 +35,9 @@ const phrases = [];
 let header = `---
 title: \"Let's Riff!\"
 path: /riff
-desc: d.
-location: l.
 ---
 
-import { Utils, FullscreenImage, GifImage } from '../../src/components'
+import { Utils, FullscreenImage } from '../../src/components'
 
 `;
 
