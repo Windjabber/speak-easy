@@ -25,8 +25,8 @@ const Italics = slide.Italics;
 const GifImage = slide.GifImage;
 const UTILS = slide.UTILS;
 
-// const phrases = [];
-const phrases = ["This is a test", "can we be happy", "please", "angry", "sad", "show me cats"];
+const phrases = [];
+//const phrases = ["This is a test", "can we be happy", "please", "angry", "sad", "show me cats"];
 
 let header = `---
 title: \"Let's Riff!\"
@@ -828,5 +828,3 @@ const genSlides = async (objs) => {
         if (err) throw err;
     });
 };
-
-updateLoop();
