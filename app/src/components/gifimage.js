@@ -10,7 +10,7 @@ export const GifImage = ({keyword}) => {
       console.log(gifs.length);
       setImg(gifs['data']['image_original_url']);
     });
-  });
+  }, []);
 
   if (img === null) {
     return null;
