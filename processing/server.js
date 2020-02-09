@@ -27,7 +27,7 @@ const UTILS = slide.UTILS;
 const phrases = [];
 
 let header = `---
-title: \"Simpsons\"
+title: \"Let's Riff\"
 path: /riff
 desc: d.
 location: l.
