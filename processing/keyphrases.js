@@ -91,7 +91,7 @@ const keywordMappings = [
     {
         keywords: ['welcome'],
         gen: (objs, words, i) => {
-            objs.push(new Title("Welcome!!!"));
+            objs.push(new Title("Welcome!"));
             objs.push(new SoftNext());
             return 0;
         }
@@ -100,7 +100,7 @@ const keywordMappings = [
         keywords: ['thank', 'you'],
         gen: (objs, words, i) => {
             objs.push(new Next());
-            objs.push(new Title("Thank you!!!"));
+            objs.push(new Title("Thank you!"));
             objs.push(new Text("Any questions?"));
             objs.push(new SoftNext());
             return 1;
