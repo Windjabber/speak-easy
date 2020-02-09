@@ -1,9 +1,8 @@
 import React from "react";
-import { graphql } from "gatsby";
+import { graphql, Link } from "gatsby";
 import Layout from "../components/layout";
 import {SpeakEasy, SEO} from "../components";
 import '../styles/start.css';
-import AniLink from "gatsby-plugin-transition-link/AniLink";
 
 
 const Start = ({ data }) => {
