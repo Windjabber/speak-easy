@@ -8,6 +8,14 @@ ${UTILS}
 
 `;
 
+String.prototype.toTitleCase = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1)
+};
+
+String.prototype.toProperCase = function () {
+    return this.split(".").map(x => x.trim().toTitleCase()).join(". ");
+};
+
 class GifImage {
   constructor(keyword) {
     this.keyword = keyword
@@ -24,7 +32,7 @@ class Text {
   }
 
   toMdx(last) {
-    return this.txt.trim() + '\n';
+    return this.txt.toProperCase() + '\n';
   }
 }
 
@@ -34,7 +42,7 @@ class Italics {
   }
 
   toMdx(last) {
-    return this.txt === '' ? '' : '*' + this.txt.trim() + '*' + '\n';
+    return this.txt === '' ? '' : '*' + this.txt.toProperCase() + '*' + '\n';
   }
 }
 
@@ -47,7 +55,7 @@ class Bullet {
     let str = '';
 
     for (let point of this.points) {
-      str += ' - ' + point.toUpperCase() + '\n';
+      str += ' - ' + point.toProperCase() + '\n';
     }
 
     return str;
