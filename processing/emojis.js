@@ -459,6 +459,8 @@ const emojiMapping = {
     "restroom": ":restroom:",
     "mens": ":mens:",
     "womens": ":womens:",
+    "baby": ":baby_symbol:",
+    "smoking": ":no_smoking:",
     "parking": ":parking:",
     "wheelchair": ":wheelchair:",
     "metro": ":metro:",
@@ -479,6 +481,7 @@ const emojiMapping = {
     "pedestrians": ":no_pedestrians:",
     "children": ":children_crossing:",
     "entry": ":no_entry:",
+    "heart": ":heart_decoration:",
     "vs": ":vs:",
     "chart": ":chart:",
     "aries": ":aries:",
@@ -494,6 +497,8 @@ const emojiMapping = {
     "aquarius": ":aquarius:",
     "pisces": ":pisces:",
     "ophiuchus": ":ophiuchus:",
+    "b": ":b:",
+    "ab": ":ab:",
     "o2": ":o2:",
     "recycle": ":recycle:",
     "end": ":end:",
@@ -510,6 +515,4 @@ const emojiMapping = {
     "shipit": ":shipit:"
 };
 
-module.exports = {
-    emojiMapping
-};
+module.exports = emojiMapping;
