@@ -9,6 +9,7 @@ const Bullet = slide.Bullet;
 const Title = slide.Title;
 const Next = slide.Next;
 const SoftNext = slide.SoftNext;
+const Italics = slide.Italics;
 const UTILS = slide.UTILS;
 
 const textObject = {text: ''};
@@ -82,7 +83,8 @@ const keywordMappings = [
     keywords: ['we', 'are'],
     gen: (objs, words, i) => {
       objs.push(new Title("We are..."));
-      return 1;
+      objs.push(new Italics(words[i + 1]));
+      return 2;
     }
   }
 ];
