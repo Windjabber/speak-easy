@@ -22,7 +22,15 @@ const Start = ({ data }) => {
           {nodes.map(item => {
             const { path } = item.frontmatter;
             return (
-              <div className="col-xs-12 col-md-6 col-lg-4 pad-10-l pad-10-r">
+              <div
+                className="col-xs-12 col-md-6 col-lg-4 pad-10-l pad-10-r"
+                onClick={ () => {
+                  fetch('http://localhost:8080/start', {
+                      method: 'POST',
+                  });
+                }
+                }
+              >
                 <AniLink
                   cover
                   to={`/decks/${path}/slides/0`}
