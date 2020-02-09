@@ -1,3 +1,7 @@
+## Speakeasy
+
+We make presentations in one click, all you have to do is speak. Making slideshows is a painful process that always seems to go wrong. All with visualisations to keep people interested.
+
 ## Inspiration
 
 The motivation behind this project was reducing people's dependence on slides when presenting, while providing an engaging visual aid. We get into bad habits with a pre-prepared slide deck: We're less dynamic, more wooden and are oh so tempted to glimpse at the slides. We also have a tendency to put too much information on a slide.
