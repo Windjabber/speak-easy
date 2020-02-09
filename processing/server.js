@@ -134,7 +134,7 @@ const slidesToMdx = (slides) => {
     for (var i = 0; i < slides.length; i++) {
       const s = slides[i];
       console.log(i, slides.length - 1);
-      str += s.toMdx(i == slides.length - 1);
+      str += s.toMdx(i === slides.length - 1);
     }
 
     str += UTILS;
