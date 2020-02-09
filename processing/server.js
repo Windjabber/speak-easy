@@ -55,10 +55,24 @@ const keywordMappings = [
     }
   },
   {
+    keywords: ['lets', 'continue', 'on'],
+    gen: (objs, words, i) => {
+      objs.push(new Next());
+      return 2;
+    }
+  },
+  {
     keywords: ['moving', 'on', 'now'],
     gen: (objs, words, i) => {
       objs.push(new Next());
       return 2;
+    }
+  },
+  {
+    keywords: ['moving', 'on'],
+    gen: (objs, words, i) => {
+      objs.push(new Next());
+      return 1;
     }
   },
   {
