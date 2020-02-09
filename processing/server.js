@@ -69,6 +69,16 @@ const keywordMappings = [
     }
   },
   {
+    keywords: ['thank', 'you'],
+    gen: (objs, words, i) => {
+      objs.push(new Next());
+      objs.push(new Title("Thank you!!!"));
+      objs.push(new Text("Any questions?"));
+      objs.push(new SoftNext());
+      return 1;
+    }
+  },
+  {
     keywords: ['we', 'are'],
     gen: (objs, words, i) => {
       objs.push(new Title("We are..."));
@@ -133,7 +143,6 @@ const slidesToMdx = (slides) => {
 
     for (var i = 0; i < slides.length; i++) {
       const s = slides[i];
-      console.log(i, slides.length - 1);
       str += s.toMdx(i === slides.length - 1);
     }
 
@@ -147,4 +156,3 @@ const genSlides = (slides) => {
     if (err) throw err;
   });
 };
-
