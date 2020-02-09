@@ -1,3 +1,13 @@
+const slide = require('./slide');
+
+const Text = slide.Text;
+const Bullet = slide.Bullet;
+const Title = slide.Title;
+const Next = slide.Next;
+const SoftNext = slide.SoftNext;
+const Italics = slide.Italics;
+const GifImage = slide.GifImage;
+
 const keywordMappings = [
     {
         keywords: ['go', 'back'],
