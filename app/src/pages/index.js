@@ -20,7 +20,7 @@ const Start = ({ data }) => {
           </div>
           <div className="row">
           {nodes.map(item => {
-            const { path } = item.frontmatter;
+            const { title, path } = item.frontmatter;
             return (
               <div
                 className="col-xs-12 col-md-6 col-lg-4 pad-10-l pad-10-r"
@@ -37,6 +37,7 @@ const Start = ({ data }) => {
                   bg="#fff"
                 >
                   <div className="door"/>
+                  <h4 className="is-bright center-xs">{title}</h4>
                 </AniLink>
               </div>
             );
