@@ -22,7 +22,7 @@ class GifImage {
   }
 
   toMdx(last) {
-    return `<GifImage keyword="${this.keyword.trim()}"/>\n`;
+    return `\n\n<GifImage keyword="${this.keyword.trim()}"/>\n\n`;
   }
 }
 
