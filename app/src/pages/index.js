@@ -50,7 +50,7 @@ const Start = ({ data }) => {
 
 export const query = graphql`
   {
-    allMdx {
+    allMdx(filter: {frontmatter: {title: {glob: "!(Let's Riff on)*"}, path: {ne: "/BugFixPres"}}}) {
       nodes {
         frontmatter {
           path
