@@ -151,13 +151,13 @@ const parse = async (text) => {
     const words = processedText.split(" ").slice();
     for (let i = 0; i < words.length; i++) {
         let matched = false;
-        const word = words[0];
+        const word = words[i];
 
         for (let mapping of keywordMappings) {
             let match = true;
 
             for (let j = 0; j < mapping.keywords.length; j++) {
-                if (words[j] !== mapping.keywords[j]) {
+                if (words[i + j] !== mapping.keywords[j]) {
                     match = false;
                     break;
                 }

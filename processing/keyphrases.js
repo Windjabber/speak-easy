@@ -101,6 +101,7 @@ const keywordMappings = [
         keywords: ['welcome'],
         gen: (objs, words, i) => {
             objs.push(new Title("Welcome!"));
+            objs.push(new Text(":wave:"));
             objs.push(new SoftNext());
             return 0;
         }
@@ -118,6 +119,7 @@ const keywordMappings = [
     {
         keywords: ['we', 'are'],
         gen: (objs, words, i) => {
+            console.log("We are");
             objs.push(new Title("We are..."));
             if (i + 2 >= words.length) return -1;
             if (objs.length - 1 >= i + 2) {
