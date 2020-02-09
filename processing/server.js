@@ -708,16 +708,11 @@ const getSemanticRoles = async (text) => {
     },
     'text': `${text}`
   };
-  return await naturalLanguageUnderstanding.analyze(analyzeParams)
-    .then(res => {
-      // Process output
-      lastSeenText = text;
-      lastSeenRoles = res["result"]["semantic_roles"];
-      return lastSeenRoles;
-    })
-    .catch(err => {
-      console.log('error:', err);
-    });
+  const res = await naturalLanguageUnderstanding.analyze(analyzeParams);
+  // Process output
+  lastSeenText = text;
+  lastSeenRoles = res["result"]["semantic_roles"];
+  return lastSeenRoles;
 };
 
 const processSemanticRoles = (semanticRoles) => {
@@ -736,14 +731,14 @@ const parse = async (text) => {
 
   let curText = '';
   const words = text.split(" ");
-  for (var i = 0; i < words.length; i++) {
+  for (let i = 0; i < words.length; i++) {
     let matched = false;
     const word = words[i];
 
     for (let mapping of keywordMappings) {
       let match = true;
 
-      for (var j = 0; j < mapping.keywords.length; j++) {
+      for (let j = 0; j < mapping.keywords.length; j++) {
         if (words[i + j] !== mapping.keywords[j]) {
           match = false;
           break;
@@ -777,29 +772,29 @@ const parse = async (text) => {
   if (curText !== '') {
     let semanticRoles = await getSemanticRoles(curText);
     if (semanticRoles) {
-      let semantic_objs = processSemanticRoles(semanticRoles);
-      semantic_objs.forEach(semantic_obj => {
-        objs.push(semantic_obj)
+      let semanticObjs = processSemanticRoles(semanticRoles);
+      semanticObjs.forEach(semanticObj => {
+        objs.push(semanticObj)
       })
     } else {
-      objs.push(new Text(curText));
+      objs.push(Promise.resolve(new Text(curText)));
     }
   }
   console.log(objs);
   return objs;
 };
 
-const updateLoop = () => {
+const updateLoop = async () => {
     console.log(phrases);
     const text = phrases.join(' ');
-    const objs = parse(text);
-    genSlides(objs);
+    const objs = await parse(text);
+    await genSlides(objs);
 };
 
-const slidesToMdx = (slides) => {
+const objsToMdx = (slides) => {
     let str = header;
 
-    for (var i = 0; i < slides.length; i++) {
+    for (let i = 0; i < slides.length; i++) {
         const s = slides[i];
         str += s.toMdx(i === slides.length - 1);
     }
@@ -809,8 +804,9 @@ const slidesToMdx = (slides) => {
     return str;
 };
 
-const genSlides = (slides) => {
-    fs.writeFile('../app/decks/riff/slides.mdx', slidesToMdx(slides), function (err) {
+const genSlides = async (objs) => {
+    let allObjs = await Promise.all(objs);
+    fs.writeFile('../app/decks/riff/slides.mdx', objsToMdx(allObjs), function (err) {
         if (err) throw err;
     });
 };
